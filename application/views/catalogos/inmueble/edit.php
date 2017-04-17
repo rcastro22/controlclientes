@@ -86,6 +86,30 @@
 									</div>
 								</div>
 
+								<div class="row">
+                  					<div class="col-lg-4">
+	                  					<div class="form-group <?php if(form_error('finca')) echo 'has-error'; ?>">
+											<label class="control-label" for="name"> Finca: </label>
+											<input class="form-control" type="text" name="finca" id="finca" value="<?php echo $datosinmueble->finca; ?>" maxlength="10">
+											<?php echo form_error('finca','<div class="help-block" >','</div>'); ?>
+										</div>
+									</div>
+									<div class="col-lg-4">
+	                  					<div class="form-group <?php if(form_error('folio')) echo 'has-error'; ?>">
+											<label class="control-label" for="name"> Folio: </label>
+											<input class="form-control" type="text" name="folio" id="folio" value="<?php echo $datosinmueble->folio; ?>" maxlength="10">
+											<?php echo form_error('folio','<div class="help-block" >','</div>'); ?>
+										</div>
+									</div>	
+									<div class="col-lg-4">
+	                  					<div class="form-group <?php if(form_error('libro')) echo 'has-error'; ?>">
+											<label class="control-label" for="name"> Libro: </label>
+											<input class="form-control" type="text" name="libro" id="libro" value="<?php echo $datosinmueble->libro; ?>" maxlength="10">
+											<?php echo form_error('libro','<div class="help-block" >','</div>'); ?>
+										</div>
+									</div>								
+								</div>
+
 								<div style="text-align:center">
 									<button class="btn btn-lg btn-negro">Modificar</button>
 								</div>

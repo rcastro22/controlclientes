@@ -45,6 +45,9 @@ class inmueble extends MY_Controller
 				$datosinmueble->preciometro2=$this->input->post('preciometro2');
 				$datosinmueble->dormitorios=$this->input->post('dormitorios');
 				$datosinmueble->sotano=$this->input->post('sotano');
+				$datosinmueble->finca=$this->input->post('finca');
+				$datosinmueble->folio=$this->input->post('folio');
+				$datosinmueble->libro=$this->input->post('libro');
 
 				$this->load->view('catalogos/inmueble/nuevo',$this->view_data);	
 				break;
@@ -57,6 +60,9 @@ class inmueble extends MY_Controller
 				$this->form_validation->set_rules('preciometro2','Precio Metro cuadrado','numeric|required');
 				$this->form_validation->set_rules('dormitorios','Dormitorios','numeric|required');
 				$this->form_validation->set_rules('sotano','Nivel','required|alphanumeric');
+				$this->form_validation->set_rules('finca','Finca','required|numeric');
+				$this->form_validation->set_rules('folio','Folio','required|numeric');
+				$this->form_validation->set_rules('libro','Libro','required|numeric');
 				if($this->form_validation->run()==FALSE)
 				{
 					$datosinmueble = new stdClass();	
@@ -69,6 +75,9 @@ class inmueble extends MY_Controller
 					$datosinmueble->preciometro2=$this->input->post('preciometro2');
 					$datosinmueble->dormitorios=$this->input->post('dormitorios');
 					$datosinmueble->sotano=$this->input->post('sotano');
+					$datosinmueble->finca=$this->input->post('finca');
+					$datosinmueble->folio=$this->input->post('folio');
+					$datosinmueble->libro=$this->input->post('libro');
 
 					$this->view_data['datosinmueble']=$datosinmueble;
 					$this->load->view('catalogos/inmueble/nuevo',$this->view_data);
@@ -85,6 +94,9 @@ class inmueble extends MY_Controller
 						   'preciometro2'=>($this->input->post('preciometro2')=="" ? 0 : $this->input->post('preciometro2')),
 						   'dormitorios'=>($this->input->post('dormitorios')=="" ? 0 : $this->input->post('dormitorios')),
 						   'sotano'=>$this->input->post('sotano'),
+						   'finca'=>$this->input->post('finca'),
+						   'folio'=>$this->input->post('folio'),
+						   'libro'=>$this->input->post('libro'),
 						   'CreadoPor'=>$this->session->userdata('user_id'),
 						   'FechaCreado'=>date("Y-m-d H:i:s"),
 						   'ModificadoPor'=>$this->session->userdata('user_id'),
@@ -101,6 +113,9 @@ class inmueble extends MY_Controller
 						$datosinmueble->preciometro2="";
 						$datosinmueble->dormitorios="";
 						$datosinmueble->sotano="";
+						$datosinmueble->finca="";
+						$datosinmueble->folio="";
+						$datosinmueble->libro="";
 						$this->view_data['datosinmueble']=$datosinmueble;
 
 						$this->view_data["nuevo"]="preguntar";
@@ -120,6 +135,9 @@ class inmueble extends MY_Controller
 						$datosinmueble->preciometro2=$this->input->post('preciometro2');
 						$datosinmueble->dormitorios=$this->input->post('dormitorios');
 						$datosinmueble->sotano=$this->input->post('sotano');
+						$datosinmueble->finca=$this->input->post('finca');
+						$datosinmueble->folio=$this->input->post('folio');
+						$datosinmueble->libro=$this->input->post('libro');
 						$this->view_data['datosinmueble']=$datosinmueble;
 
                     	$this->view_data['mensaje']="Error: No se pudo insertar el registro: ".$err;
@@ -157,6 +175,9 @@ class inmueble extends MY_Controller
 				$this->form_validation->set_rules('preciometro2','Precio metro cuadrado','numeric|required');
 				$this->form_validation->set_rules('dormitorios','Dormitorios','numeric|required');
 				$this->form_validation->set_rules('sotano','Sotano','required|alphanumeric');
+				$this->form_validation->set_rules('finca','Finca','required|numeric');
+				$this->form_validation->set_rules('folio','Folio','required|numeric');
+				$this->form_validation->set_rules('libro','Libro','required|numeric');
 				if($this->form_validation->run()==FALSE)
 				{
 					$datosinmueble = new stdClass();					
@@ -168,6 +189,9 @@ class inmueble extends MY_Controller
 					$datosinmueble->preciometro2=$this->input->post('preciometro2');
 					$datosinmueble->dormitorios=$this->input->post('dormitorios');
 					$datosinmueble->sotano=$this->input->post('sotano');
+					$datosinmueble->finca=$this->input->post('finca');
+					$datosinmueble->folio=$this->input->post('folio');
+					$datosinmueble->libro=$this->input->post('libro');
 					$this->view_data['datosinmueble']=$datosinmueble;
 					$this->load->view('catalogos/inmueble/edit',$this->view_data);
 				}
@@ -183,6 +207,9 @@ class inmueble extends MY_Controller
 							   'preciometro2'=>($this->input->post('preciometro2')=="" ? 0 : $this->input->post('preciometro2')),
 							   'dormitorios'=>($this->input->post('dormitorios')=="" ? 0 : $this->input->post('dormitorios')),
 							   'sotano'=>$this->input->post('sotano'),
+							   'finca'=>$this->input->post('finca'),
+						   		'folio'=>$this->input->post('folio'),
+						   		'libro'=>$this->input->post('libro'),
 							   'ModificadoPor'=>$this->session->userdata('user_id'),
 							   'FechaModificado'=>date("Y-m-d H:i:s")
 						        ),$err);
@@ -196,6 +223,9 @@ class inmueble extends MY_Controller
 					$datosinmueble->tamano=$this->input->post('preciometro2');
 					$datosinmueble->dormitorios=$this->input->post('dormitorios');
 					$datosinmueble->sotano=$this->input->post('sotano');
+					$datosinmueble->finca=$this->input->post('finca');
+					$datosinmueble->folio=$this->input->post('folio');
+					$datosinmueble->libro=$this->input->post('libro');
 					$this->view_data['datosinmueble']=$datosinmueble;
                     if ($siactualizo)
                     {

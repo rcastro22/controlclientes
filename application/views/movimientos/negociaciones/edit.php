@@ -452,8 +452,14 @@
 	      </div>
 	      <div class="modal-body">
 	      	<div class="row">
-		        <a href="<?php echo base_url().'movimientos/word/contratoReserva/'.$datosnegociacion->idnegociacion;?>" class="btn btn-negro pull-left col-lg-5" >Contrato de Reserva</a>
-		        <a href="<?php echo base_url().'movimientos/word/contratoPromesaCompraventa/'.$datosnegociacion->idnegociacion;?>" class="btn btn-negro pull-left col-lg-6 col-lg-offset-1" >Contrato de Promesa de Compraventa</a>
+		        <a href="<?php echo base_url().'movimientos/word/contratoReserva/'.$datosnegociacion->idnegociacion;?>" class="btn btn-negro pull-left col-lg-6 col-lg-offset-3" >Contrato de Reserva</a>
+		           
+	      	</div>
+	      	<div class="row">
+	      		<a href="<?php echo base_url().'movimientos/word/contratoPromesaCompraventa/'.$datosnegociacion->idnegociacion;?>" class="btn btn-negro pull-left col-lg-6 col-lg-offset-3" >Contrato de Promesa de Compraventa</a>
+	      	</div>
+	      	<div class="row">
+	      		<a href="<?php echo base_url().'movimientos/word/minutaCompraventa/'.$datosnegociacion->idnegociacion;?>" class="btn btn-negro pull-left col-lg-6 col-lg-offset-3" >Minuta de Compraventa</a>
 	      	</div>
 	      </div>
 	      <div class="modal-footer">

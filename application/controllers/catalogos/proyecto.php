@@ -53,6 +53,9 @@ class proyecto extends MY_Controller
 				$this->form_validation->set_rules('nombre','nombre','required');
 				$this->form_validation->set_rules('dialimite','Dia inicio mora','required|numeric');
 				$this->form_validation->set_rules('porcentajemora','porcentaje de mora','required|numeric');
+				$this->form_validation->set_rules('finca','Finca','required|numeric');
+				$this->form_validation->set_rules('folio','Folio','required|numeric');
+				$this->form_validation->set_rules('libro','Libro','required|numeric');
 	
 				if($this->form_validation->run()==FALSE)
 				{
@@ -82,6 +85,9 @@ class proyecto extends MY_Controller
 						   'nombre'=>$this->input->post('nombre'),
 						   'dialimite'=>$this->input->post('dialimite'),
 						   'porcentajemora'=>$this->input->post('porcentajemora'),
+						   'finca'=>$this->input->post('finca'),
+						   'folio'=>$this->input->post('folio'),
+						   'libro'=>$this->input->post('libro'),
 						   'CreadoPor'=>$this->session->userdata('user_id'),
 						   'FechaCreado'=>date("Y-m-d H:i:s"),
 						   'ModificadoPor'=>$this->session->userdata('user_id'),
@@ -136,6 +142,9 @@ class proyecto extends MY_Controller
 				$this->form_validation->set_rules('nombre','nombre','required');
 				$this->form_validation->set_rules('dialimite','Dia inicio mora','required|numeric');
 				$this->form_validation->set_rules('porcentajemora','porcentaje de mora','required|numeric');
+				$this->form_validation->set_rules('finca','Finca','required|numeric');
+				$this->form_validation->set_rules('folio','Folio','required|numeric');
+				$this->form_validation->set_rules('libro','Libro','required|numeric');
 	
 
 				if($this->form_validation->run()==FALSE)
@@ -146,6 +155,9 @@ class proyecto extends MY_Controller
 					$datosproyecto->nombre= $this->input->post('nombre');
 					$datosproyecto->dialimite= $this->input->post('dialimite');
 					$datosproyecto->porcentajemora= $this->input->post('porcentajemora');
+					$datosproyecto->finca= $this->input->post('finca');
+					$datosproyecto->folio= $this->input->post('folio');
+					$datosproyecto->libro= $this->input->post('libro');
 				
 
 				
@@ -164,6 +176,9 @@ class proyecto extends MY_Controller
 						   'nombre'=>$this->input->post('nombre'),
 						   'dialimite'=>$this->input->post('dialimite'),
 						   'porcentajemora'=>$this->input->post('porcentajemora'),
+						   'finca'=>$this->input->post('finca'),
+						   'folio'=>$this->input->post('folio'),
+						   'libro'=>$this->input->post('libro'),
 						   'ModificadoPor'=>$this->session->userdata('user_id'),
 						   'FechaModificado'=>date("Y-m-d H:i:s")
 						   ),$err);
@@ -173,6 +188,9 @@ class proyecto extends MY_Controller
 					$datosproyecto->nombre= $this->input->post('nombre');
 					$datosproyecto->dialimite= $this->input->post('dialimite');
 					$datosproyecto->porcentajemora= $this->input->post('porcentajemora');
+					$datosproyecto->finca= $this->input->post('finca');
+					$datosproyecto->folio= $this->input->post('folio');
+					$datosproyecto->libro= $this->input->post('libro');
 					$this->view_data['datosproyecto']=$datosproyecto;
 
                     if ($siactualizo)

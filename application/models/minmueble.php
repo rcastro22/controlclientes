@@ -40,7 +40,10 @@ class minmueble extends CI_Model {
 											from detallenegociacion e
 											join negociacion f on f.[idnegociacion] = e.[idnegociacion]
 											where e.[idinmueble] = a.[idinmueble]
-											and f.[idproyecto] = a.[idproyecto]) idnegociacion
+											and f.[idproyecto] = a.[idproyecto]) idnegociacion,
+											a.finca,
+											a.folio,
+											a.libro
 									from inmueble a
 									join proyecto b on a.idproyecto = b.idproyecto
 									join tipoinmueble c on c.idtipoinmueble = a.idtipoinmueble
@@ -58,7 +61,10 @@ class minmueble extends CI_Model {
 						   a.tamano,
 						   a.preciometro2,
 						   a.dormitorios,
-						   a.sotano
+						   a.sotano,
+						   a.finca,
+						   a.folio,
+						   a.libro
 						from inmueble a
 						where not exists (
 						select c.idinmueble from negociacion b, detallenegociacion c
@@ -80,7 +86,10 @@ class minmueble extends CI_Model {
 						   a.tamano,
 						   a.preciometro2,
 						   a.dormitorios,
-						   a.sotano");
+						   a.sotano,
+						   a.finca,
+						   a.folio,
+						   a.libro");
 		$this->db->from("inmueble a");
 		$this->db->where('a.idinmueble',$idinmueble);
 		$this->db->where('a.idproyecto',$idproyecto);
@@ -101,7 +110,10 @@ class minmueble extends CI_Model {
 								  	   a.tamano,
 								  	   a.preciometro2,
 								  	   a.dormitorios,
-								  	   a.sotano
+								  	   a.sotano,
+								  	   a.finca,
+								  	   a.folio,
+								  	   a.libro
 								from inmueble a
 								join proyecto b on a.idproyecto = b.idproyecto
 								join tipoinmueble c on c.idtipoinmueble = a.idtipoinmueble
