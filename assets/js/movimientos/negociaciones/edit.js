@@ -532,9 +532,18 @@ $('#modalContratos').on('shown.bs.modal', function () {
   $('#myInput').focus()
 })
 
+$('#modalEmail').on('shown.bs.modal', function () {
+  $('#myInput').focus()
+})
+
 $(document).on('click','#otrosduenos',function()
 {
 
 	window.location=base_url+"movimientos/negociacion/otrosduenos/"+$('#idnegociacion').val();
 })
 
+
+/*$(document).on('click','#recordatorio',function()
+	                                   {
+	                                   		window.location=base_url+"movimientos/negociacion/enviarMail/"+$('#idnegociacion').val();
+	                                   });*/

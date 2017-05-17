@@ -404,6 +404,9 @@
 								<div style="text-align:center">
 									<button class="btn btn-lg btn-negro" id="modificar">Modificar</button>
 								</div>
+								<div style="text-align:center">
+									<input type="button" class="btn btn-lg btn-negro" id="recordatorio" value="Enviar Recordatorio" data-toggle="modal" data-target="#modalEmail">
+								</div>
 							</form>
 							<br><br><br>
 							<div class="row table-responsive">
@@ -470,13 +473,33 @@
 	  </div>
 	</div>
 
+	<!-- Modal E-mail -->
+	<div class="modal fade" id="modalEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Recordatorio</h4>
+	      </div>
+	      <div class="modal-body">
+		     <p>¿Esta seguro que desea enviar el recordatorio de pago?</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+	        <a href="<?php echo base_url().'movimientos/negociacion/enviarMail/'.$datosnegociacion->idnegociacion;?>" class="btn btn-primary" >Enviar recordatorio</a>
+	        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
 
 	<script src="<?php echo base_url().'assets/js/tabla.js';?>"></script>
 	<script src="<?php echo base_url().'assets/js/movimientos/negociaciones/edit.js';?>"></script> 
 	
 	<?php echo $footer;?>
 	<script>
-		$('input[name=enganche]').focus();
+		//$('input[name=enganche]').focus();
 		$('#fechaprimerpago').datepicker({'format':'yyyy-mm-dd'});
 		$('#fechareserva').datepicker({'format':'yyyy-mm-dd'});
 	</script>

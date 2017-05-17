@@ -253,6 +253,30 @@ class mnegociacion extends CI_Model {
 	}
 
 
+	public function getDatosEmail($idnegociacion)
+	{		
+		$query = $this->db->query("select
+									      c.email
+									      ,dp.fechalimitepago
+									      ,dp.pagocalculado
+									      
+									from
+									    negociacion n
+									    ,detallepago dp
+									    ,cliente c
+									where
+									     n.idnegociacion = dp.idnegociacion
+									     and n.idcliente = c.idcliente
+									     and n.idnegociacion = $idnegociacion
+									     and dp.pagocalculado != dp.pagoefectuado
+									     and dp.fechalimitepago <= date('now','+1 month','start of month','-1 day')
+									order by
+									      dp.fechalimitepago asc
+									");
+		return $query->result();
+	}
+
+
 	public function borrarComprador($data,&$err)
 	{
 		

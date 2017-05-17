@@ -301,7 +301,7 @@ class negociacion extends MY_Controller
 		}
     }
 
-	public function edit($idnegociacion=-1)
+	public function edit($idnegociacion=-1, $msgError="", $tipoAlerta="")
     {
     	$method = $this->input->server('REQUEST_METHOD');
     	$this->view_data['page_title']=  'Modificación de negociación';
@@ -317,6 +317,10 @@ class negociacion extends MY_Controller
 				$datosnegociacion->tablaotros="";
 			    $datosnegociacion->total_tablai=$datosnegociacion->precioventa;
         		$this->view_data['datosnegociacion']=$datosnegociacion;
+        		if($msgError != "") {
+        			$this->view_data['mensaje']=$msgError;
+	               	$this->view_data['tipoAlerta']=$tipoAlerta;
+	            }
 				$this->load->view('movimientos/negociaciones/edit',$this->view_data);
 				break;
 			case 'POST':
@@ -809,6 +813,101 @@ class negociacion extends MY_Controller
 		$sielimino=$this->mnegociacion->borrarComprador(array('idnegociacion'=>$idnegociacion,'idcliente'=>$idcliente),$err);
        	redirect('movimientos/negociacion/otrosduenos/'.$idnegociacion);
   
+	}
+
+    //enviar correo erick 01-05-2017
+	function enviarMail($idnegociacion)
+   	{
+	   	$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+	   	$this->load->model('mnegociacion');
+	   	$datosmail = $this->mnegociacion->getDatosEmail($idnegociacion);
+	   	$datospago = "";
+	   	$email = "";
+	   	$hayDatos = false;
+
+	   	foreach ($datosmail as $datos) {
+	   		$hayDatos = true;
+	   		$email = $datos->email;
+
+	   		$datospago .= "$".number_format($datos->pagocalculado,2,".",",")." correspodiente al mes de ".$meses[intval(Date('m',strtotime($datos->fechalimitepago)))-1]." ".Date('Y',strtotime($datos->fechalimitepago)).", ";
+	   	}
+
+	   	if($hayDatos == false)
+	   	{
+	   		$this->edit($idnegociacion,"No existen pagos pendietes a la fecha","alert-danger");
+	   	}
+
+	   	if($email == "")
+	   	{
+	   		$this->edit($idnegociacion,"No existe correo electrónico configurado para envío de recordatorio","alert-danger");
+	   	}
+
+	   	if($hayDatos == true)
+	   	{
+		   	$emailReceptor=$email;
+		   	$asunto="Recordatorio de pago";
+		   	/*$mensaje=utf8_decode("Estimado cliente, le recordamos su pago de enganche de ".$datospago." agradecemos su colaboración para poder emitir el recibo
+		   	          correspondiente, si usted ya realizó este pago, favor hacer caso omiso 
+		   	          de este correo.
+		   	         <br/><br/>
+		   	          Cuenta No. 46-5001754-6 a nombre de Herocha S.A.");*/
+
+		   	$mensaje="
+<html>
+<head>
+  <title>Recordatorio de cumpleaños para Agosto</title>
+</head>
+<body>
+	<table width='100%''>
+		<tr>
+			<th align='left'><IMG SRC='http://sistema.sursur.net/controlclientes/assets/img/logosur.jpg' WIDTH=60 HEIGHT=60 ALT='LogoSur'></th>
+			<th align='right'><h2>Recordatorio de Pago</h2></th>
+	    </tr>
+	</table>
+	<hr size=1 />
+	<p>
+		Estimado Cliente,
+		<br/><br/>
+		Le recordamos que su pago de enganche de ".$datospago." agradecemos su colaboración para poder emitir el recibo correspondiente.
+		<br/><br/>
+		Cuenta No. 46-5001754-6 a nombre de Herocha S.A.
+	</p>
+	<hr size=1 />
+	<p>
+		Si usted ya realizó este pago, favor hacer caso omiso de este correo.
+	</p>
+</body>
+</html>
+";
+			$this->load->library("email");
+
+			//configuracion para gmail
+			$configGmail = array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.gmail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'infosursur@gmail.com',
+			'smtp_pass' => 'desarrolladorasur',
+			'mailtype' => 'html',
+			'charset' => 'utf-8',
+			'newline' => "\r\n"
+			);    
+
+			//cargamos la configuración para enviar con gmail
+			$this->email->initialize($configGmail);
+
+
+
+
+			$this->email->from('infosursur@gmail.com');
+			$this->email->to($emailReceptor);
+			$this->email->subject($asunto);
+			$this->email->message($mensaje);
+			$this->email->send();
+		}
+
+		$this->edit($idnegociacion,"Recordatorio enviado con exito!!","alert-success");
+		
 	}
 
 
