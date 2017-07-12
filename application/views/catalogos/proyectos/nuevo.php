@@ -26,18 +26,25 @@
 									<div>
 								</div>
 								<div class="row">
-                  					<div class="col-lg-5 ">
+                  					<div class="col-lg-3 ">
 	                  					<div class="form-group <?php if(form_error('dialimite')) echo 'has-error'; ?>">
 											<label class="control-label" for="name"> Día del mes en que inicia la mora: </label>
 											<input class="form-control" type="text" name="dialimite" id="dialimite" value="<?php echo set_value('dialimite'); ?>" maxlength="2">
 											<?php echo form_error('dialimite','<div class="help-block" >','</div>'); ?>
 										</div>
 									</div>
-									<div class="col-lg-6  col-lg-offset-1">
+									<div class="col-lg-3  col-lg-offset-1">
 	                  					<div class="form-group <?php if(form_error('porcentajemora')) echo 'has-error'; ?>">
 											<label class="control-label" for="name"> Porcentaje de mora (%): </label>
 											<input class="form-control" type="text" name="porcentajemora" id="porcentajemora" value="<?php echo set_value('porcentajemora'); ?>" maxlength="6">
 											<?php echo form_error('porcentajemora','<div class="help-block" >','</div>'); ?>
+										</div>
+									</div>
+									<div class="col-lg-4  col-lg-offset-1">
+	                  					<div class="form-group <?php if(form_error('valortipocambio')) echo 'has-error'; ?>">
+											<label class="control-label" for="name"> Tipo de cambio: </label>
+											<input class="form-control" type="text" name="valortipocambio" id="valortipocambio" value="<?php echo set_value('valortipocambio'); ?>" maxlength="6">
+											<?php echo form_error('valortipocambio','<div class="help-block" >','</div>'); ?>
 										</div>
 									</div>
 								</div>

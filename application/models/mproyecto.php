@@ -8,7 +8,7 @@ class MProyecto extends CI_Model {
 	{		
 		//echo "modelo";
 		//exit;
-		$this->db->select('a.idproyecto,a.nombre,a.dialimite,a.porcentajemora,a.finca,a.folio,a.libro');
+		$this->db->select('a.idproyecto,a.nombre,a.dialimite,a.porcentajemora,a.valortipocambio,a.finca,a.folio,a.libro');
 		$this->db->from('proyecto a');
 		$this->db->order_by("a.nombre");
 		$query=$this->db->get();
@@ -18,7 +18,7 @@ class MProyecto extends CI_Model {
 	//trae datos del banco recibido pro parametro
 	public function getProyecto($idproyecto)
 	{		
-		$this->db->select('a.idproyecto,a.nombre,a.dialimite,a.porcentajemora,a.finca,a.folio,a.libro');
+		$this->db->select('a.idproyecto,a.nombre,a.dialimite,a.porcentajemora,a.valortipocambio,a.finca,a.folio,a.libro');
 		$this->db->from('proyecto a');
 		$this->db->where('a.idproyecto',$idproyecto);
 		$query=$this->db->get();
@@ -35,6 +35,17 @@ class MProyecto extends CI_Model {
 									where b.[idcliente] = ".$cliente.")");
 		//$query=$this->db->get();
 		return $query->result();
+	}
+
+	public function getTipoCambioDia($idproyecto)
+	{		
+		$txtQuery="select a.valortipocambio
+					from proyecto a					
+					where a.idproyecto = $idproyecto";
+
+
+        $query= $this->db->query($txtQuery);
+        return $query->result();
 	}
 	
 	public function grabar($data,&$err)

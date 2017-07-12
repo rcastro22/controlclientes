@@ -38,7 +38,7 @@
               <span>Inicio</span></a>
             </li>
             <li class="<?php echo $activo=='usuarios'?'active':''; ?>"><a href="<?php echo base_url().'admin/usuario/listado';?>">Usuario</a></li>
-            <li class="<?php echo $activo=='tipocambio'?'active':''; ?>"><a href="<?php echo base_url().'admin/tipocambio/nuevo';?>">Tipo de cambio</a></li>
+            <!--<li class="<?php echo $activo=='tipocambio'?'active':''; ?>"><a href="<?php echo base_url().'admin/tipocambio/nuevo';?>">Tipo de cambio</a></li>-->
           </ul>
         
           <ul class="nav navbar-nav navbar-right">

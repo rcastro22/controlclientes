@@ -259,7 +259,7 @@ class mnegociacion extends CI_Model {
 									      c.email
 									      ,dp.fechalimitepago
 									      ,dp.pagocalculado
-									      
+									      ,n.idproyecto
 									from
 									    negociacion n
 									    ,detallepago dp

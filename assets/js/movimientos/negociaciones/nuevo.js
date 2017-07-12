@@ -256,6 +256,7 @@ $(document).on('change','#proyectos',function(){
 	document.getElementById('inmueble').options.length = 0;
 	//$('#inmuebles').empty();
 	cargarInmueble();
+	traerTipoCambio();
 });
 
 $(document).on('change','#inmueble',function(){
@@ -350,13 +351,13 @@ function traerTipoCambio()
 {
 	var $option ='';
 	$.get(
-			base_url + 'admin/tipocambio/getTipoCambioDia'	
+			base_url + 'catalogos/proyecto/getTipoCambioDia/' + $('#hproyecto').val()
 		)
 		.done(function(data)
 		{
 			$.each(data,function(i,linea)
 			{
-				$option=linea.valor;
+				$option=linea.valortipocambio;
 				$('#txtTipoCambio').val($option);
 				
 				if (isNaN($('#txtTipoCambio').val()))
@@ -388,9 +389,9 @@ $(document).ready(function()
 {
 	//alert("<?php echo $tipoAlerta ?>");
 
-	base_url = $('base').attr('href');
+	base_url = $('base').attr('href')//;
 
-	traerTipoCambio();
+	//traerTipoCambio();
 
 
 	if($('#proyectos').length > 0)

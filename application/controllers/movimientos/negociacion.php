@@ -824,12 +824,27 @@ class negociacion extends MY_Controller
 	   	$datospago = "";
 	   	$email = "";
 	   	$hayDatos = false;
+	   	$proyecto = 0;
 
 	   	foreach ($datosmail as $datos) {
 	   		$hayDatos = true;
 	   		$email = $datos->email;
+	   		$proyecto = $datos->idproyecto;
 
-	   		$datospago .= "$".number_format($datos->pagocalculado,2,".",",")." correspodiente al mes de ".$meses[intval(Date('m',strtotime($datos->fechalimitepago)))-1]." ".Date('Y',strtotime($datos->fechalimitepago)).", ";
+	   		switch ($proyecto) {
+		   		case 1:
+		   			$simboloMoneda = "$";
+		   			break;
+		   		case 5:
+		   			$simboloMoneda = "Q";
+		   			break;
+		   		default:
+		   			$simboloMoneda = "$";
+		   			break;
+		   	}
+
+	   		$datospago .= $simboloMoneda.number_format(($simboloMoneda=="$" ? $datos->pagocalculado : round($datos->pagocalculado * 7.7,2)),2,".",",")." correspodiente al mes de ".$meses[intval(Date('m',strtotime($datos->fechalimitepago)))-1]." ".Date('Y',strtotime($datos->fechalimitepago)).", ";
+
 	   	}
 
 	   	if($hayDatos == false)
@@ -846,6 +861,17 @@ class negociacion extends MY_Controller
 	   	{
 		   	$emailReceptor=$email;
 		   	$asunto="Recordatorio de pago";
+		   	switch ($proyecto) {
+		   		case 1:
+		   			$cuentaDeposito = "en dólares: 270033640 a nombre de Herocha S.A.";
+		   			break;
+		   		case 5:
+		   			$cuentaDeposito = "en quetzales: 270028996 a nombrbe de '13 avenida 11-55 zona 2, S.A.'";
+		   			break;
+		   		default:
+		   			$cuentaDeposito = "en dólares: 270033640 a nombre de Herocha S.A.";
+		   			break;
+		   	}
 		   	/*$mensaje=utf8_decode("Estimado cliente, le recordamos su pago de enganche de ".$datospago." agradecemos su colaboración para poder emitir el recibo
 		   	          correspondiente, si usted ya realizó este pago, favor hacer caso omiso 
 		   	          de este correo.
@@ -870,7 +896,7 @@ class negociacion extends MY_Controller
 		<br/><br/>
 		Le recordamos que su pago de enganche de ".$datospago." agradecemos su colaboración para poder emitir el recibo correspondiente.
 		<br/><br/>
-		Cuenta No. 46-5001754-6 a nombre de Herocha S.A.
+		Cuenta ".$cuentaDeposito."
 	</p>
 	<hr size=1 />
 	<p>
