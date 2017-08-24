@@ -40,6 +40,7 @@
             <li class="<?php echo $activo=='clientes'?'active':''; ?>"><a href="<?php echo base_url().'movimientos/cliente/listado';?>">Clientes</a></li>
             <li class="<?php echo $activo=='asesores'?'active':''; ?>"><a href="<?php echo base_url().'movimientos/asesor/listado';?>">Asesores</a></li>
             <li class="<?php echo $activo=='aporte'?'active':''; ?>"><a href="<?php echo base_url().'movimientos/aporte/listado';?>">Inversionistas</a></li>
+            <li class="<?php echo $activo=='aporte'?'active':''; ?>"><a href="<?php echo base_url().'movimientos/recordatoriopago/listado';?>">Recordatorio de pago</a></li>
           </ul>
         
           <ul class="nav navbar-nav navbar-right">

@@ -896,6 +896,8 @@ class negociacion extends MY_Controller
 		<br/><br/>
 		Le recordamos que su pago de enganche de ".$datospago." agradecemos su colaboración para poder emitir el recibo correspondiente.
 		<br/><br/>
+		Banco Industrial
+		<br/>
 		Cuenta ".$cuentaDeposito."
 	</p>
 	<hr size=1 />
