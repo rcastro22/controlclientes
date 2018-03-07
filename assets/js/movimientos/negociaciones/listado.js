@@ -129,12 +129,12 @@ function llenarTablaLocal(Nombre, data)
     }
  };
 
-$(document).on('click','#gvBuscar>tbody>tr>td>button',function()
+/*$(document).on('click','#gvBuscar>tbody>tr>td>button',function()
 													{
 														var idnegociacion = $(this).parent().siblings(":eq(0)").text();
 														var operacion = $(this).text();
 														var estado = $(this).parent().siblings(":eq(8)").text();
-														if(estado != 'AC')
+														if(estado == 'RS')
 														{
 															alert('El estado de la negociación no es valido para esta operación')
 														}
@@ -142,6 +142,7 @@ $(document).on('click','#gvBuscar>tbody>tr>td>button',function()
 														{
 															if (operacion=='Modificar')
 															{
+
 																window.location=base_url+"movimientos/negociacion/edit/"+idnegociacion;	
 															}
 															if (operacion=='Rescindir')
@@ -163,6 +164,37 @@ $(document).on('click','#gvBuscar>tbody>tr>td>button',function()
 															}
 														}
 														//alert("hola"+carrera);
+													});*/
+
+$(document).on('click','#gvBuscar>tbody>tr>td',function()
+													{
+														tipo = $(this).children().attr("class");
+														//alert(tipo);
+														var idnegociacion = $(this).siblings(":eq(0)").text();
+														var estado = $(this).siblings(":eq(8)").text();
+														if(estado == 'RS')
+														{
+															alert('El estado de la negociación no es valido para esta operación')
+														}
+														else
+														{
+															if(tipo != "btn btn-default" && tipo != "glyphicon glyphicon-trash")
+															{
+															
+																window.location=base_url+"movimientos/negociacion/edit/"+idnegociacion;	
+															}	
+															
+															var operacion = $(this).children().text();
+															if (operacion=='Rescindir')
+															{	
+															    negociacionEliminar=idnegociacion;
+																$('#myModal').modal('toggle');
+															}
+															if (operacion=='Pagar')
+															{
+																window.location=base_url+"movimientos/negociacion/pago/"+idnegociacion;	
+															}
+														}
 													});
 
 $(document).on('click','#botonEliminar',function()
@@ -175,11 +207,38 @@ $(document).ready(function()
 {
 	base_url=$('base').attr('href');
 
-	if($('#ddcliente').length > 0)
-		cargarClientes();
-	if($('#proyectos').length > 0)
-		cargarProyectos();
+	//if($('#ddcliente').length > 0)
+	//	cargarClientes();
+	//if($('#proyectos').length > 0)
+	//	cargarProyectos();
 
-	$("#gvBuscar").tabla(base_url+'movimientos/negociacion/getNegociacion/'+$('#hcliente').val());
-	
+	//$("#gvBuscar").tabla(base_url+'movimientos/negociacion/getNegociacion/'+$('#hcliente').val());
+
+	filtrartabla();
 });
+
+
+
+$('input[type=checkbox]').on('change',function(){
+	filtrartabla();
+});
+
+
+
+function filtrartabla() {
+	var opciones = "0";
+
+	$('input[type=checkbox]:checked').each(
+	    function() {
+	        opciones += $(this).val();
+	    }
+	);
+
+	if($('#hcliente').val() != "")
+		$idcliente = $('#hcliente').val();
+	else
+		$idcliente = -1;
+	//$idcliente = ($('#hcliente').val() != "" : $('#hcliente').val() ? -1); 
+
+	$("#gvBuscar").tabla(base_url+"movimientos/negociacion/getNegociacion/"+$idcliente+"/"+opciones);
+} 

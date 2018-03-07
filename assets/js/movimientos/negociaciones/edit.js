@@ -38,15 +38,20 @@ function cargarProyecto()
 
 function cargarClientes()
 {
+	var datosj = new Array();
+
 	$.get(
 			base_url + 'movimientos/cliente/getCliente'		
 		)
 		.done(function(data)
 		{
+			var $option ='';
+			$option =$('<option>');
+			$option.val(0);
+			$option.html('Seleccione Cliente');
+			$('#cliente').append($option);
 			$.each(data,function(i,linea)
 			{
-				var $option ='';
-
 				if (linea.idcliente == $('#hcliente').val())
 				{
 					$option =$('<option selected>');
@@ -59,6 +64,21 @@ function cargarClientes()
 				$option.html(linea.nombre);
 				$('#cliente').append($option);
 			})
+
+
+			datos = data;
+            for (i = 0; i < datos.length; i++)
+            {
+                datosj[i] = { id: datos[i].idcliente, text: datos[i].idcliente + ' - ' + datos[i].nombre + ' ' + datos[i].apellido };
+            }
+            $("#cboCliente").select2({
+            	placeholder: "Seleccione cliente",
+                allowClear: true,
+                data: datosj,
+                width: '100%'
+            });
+
+
 		})
 		.fail(function(data)
 		{
@@ -165,6 +185,99 @@ function cargarInmueble()
 		});
 }
 
+
+function cargarDatosCliente() {
+	$.get(
+			base_url + 'movimientos/cliente/getClienteId/'+$('#hcliente').val()		
+		)
+		.done(function(data)
+		{
+			if($('#hcliente').val() != '0' && $('#hcliente').val() != '') {
+				$('#nombre').val(data.nombre);
+				$('#apellido').val(data.apellido);
+				$('#nit').val(data.nit);
+				$('#fecnacimiento').val(data.fecnacimiento);
+				calcularEdad($('#fecnacimiento').val());
+				$('#dpi').val(data.dpi);
+				$('#estadocivil').val(data.estadocivil);
+				$('#profesion').val(data.profesion);
+				$('#correo').val(data.correo);
+				$('#telefono').val(data.telefono);
+				$('#celular').val(data.celular);
+				$('#direccion').val(data.dirresidencia);
+				$('#empresa').val(data.lugartrabajo);
+				$('#tiempolabor').val(data.tiempolabor);
+				$('#dirtrabajo').val(data.dirtrabajo);
+				$('#puesto').val(data.puesto);
+				$('#ingresos').val(data.ingresos);
+				$('#otrosingresos').val(data.otrosingresos);
+
+				$('#nombre').attr('readonly','true');
+				$('#apellido').attr('readonly','true');
+				$('#nit').attr('readonly','true');
+				$('#fecnacimiento').attr('readonly','true');
+				//$('#edad').attr('readonly','true');
+				$('#dpi').attr('readonly','true');
+				$('#estadocivil').attr('readonly','true');
+				$('#profesion').attr('readonly','true');
+				$('#correo').attr('readonly','true');
+				$('#telefono').attr('readonly','true');
+				$('#celular').attr('readonly','true');
+				$('#direccion').attr('readonly','true');
+				$('#empresa').attr('readonly','true');
+				$('#tiempolabor').attr('readonly','true');
+				$('#dirtrabajo').attr('readonly','true');
+				$('#puesto').attr('readonly','true');
+				$('#ingresos').attr('readonly','true');
+				$('#otrosingresos').attr('readonly','true');
+			}
+			else {
+				$('#nombre').val('');
+				$('#apellido').val('');
+				$('#nit').val('');
+				$('#fecnacimiento').val('');
+				$('#edad').val('');
+				$('#dpi').val('');
+				$('#estadocivil').val('');
+				$('#profesion').val('');
+				$('#correo').val('');
+				$('#telefono').val('');
+				$('#celular').val('');
+				$('#direccion').val('');
+				$('#empresa').val('');
+				$('#tiempolabor').val('');
+				$('#dirtrabajo').val('');
+				$('#puesto').val('');
+				$('#ingresos').val('');
+				$('#otrosingresos').val('');
+
+				$('#nombre').removeAttr('readonly');
+				$('#apellido').removeAttr('readonly');
+				$('#nit').removeAttr('readonly');
+				$('#fecnacimiento').removeAttr('readonly');
+				//$('#edad').removeAttr('readonly');
+				$('#dpi').removeAttr('readonly');
+				$('#estadocivil').removeAttr('readonly');
+				$('#profesion').removeAttr('readonly');
+				$('#correo').removeAttr('readonly');
+				$('#telefono').removeAttr('readonly');
+				$('#celular').removeAttr('readonly');
+				$('#direccion').removeAttr('readonly');
+				$('#empresa').removeAttr('readonly');
+				$('#tiempolabor').removeAttr('readonly');
+				$('#dirtrabajo').removeAttr('readonly');
+				$('#puesto').removeAttr('readonly');
+				$('#ingresos').removeAttr('readonly');
+				$('#otrosingresos').removeAttr('readonly');
+			}
+		})
+		.fail(function(data)
+		{
+			
+			console.log('error inmueble!!!');
+		});
+}
+
 function cargarAsesor()
 {
 	$.get(
@@ -173,10 +286,10 @@ function cargarAsesor()
 		.done(function(data)
 		{
 			var $option ='';
-			/*$option =$('<option>');
+			$option =$('<option>');
 			$option.val(0);
-			$option.html('Seleccione Inmueble');
-			$('#inmueble').append($option);*/
+			$option.html('Seleccione asesor');
+			$('#asesor').append($option);
 			$.each(data,function(i,linea)
 			{
 				if (linea.idasesor == $('#hasesores').val())
@@ -188,7 +301,7 @@ function cargarAsesor()
 					$option =$('<option>');
 				}
 				$option.val(linea.idasesor);
-				$option.html(linea.nombre);
+				$option.html(linea.nombre+ ' '+linea.apellido);
 				$('#asesor').append($option);
 			})
 		})
@@ -212,11 +325,19 @@ function cargarDetalleNegociacion()
 					$('#txtTotalDecimal').val("0");	
 				}
 				varTotal = parseFloat($('#txtTotalDecimal').val())+parseFloat(linea.valor);
-
+				if($('#montodescuento').val() != 0) {
+					varTotalDescuento = varTotal - parseFloat($('#montodescuento').val());
+					if(varTotalDescuento < 0) {
+				    	varTotalDescuento = 0;
+				    }
+				}
+				else {
+					varTotalDescuento = varTotal;
+				}
 				newArray.push({ idnegociacion: $("#idnegociacion").val(), idinmueble: linea.idinmueble, tipo: linea.tipo, modelo:linea.modelo, monto: linea.valor });
 	        	llenarTablaLocal("gvProductos", $.parseJSON(JSON.stringify(newArray)));
 	        	$('#txtTotalDecimal').val(varTotal.toFixed(6));
-	        	$('#precioventa').val(varTotal.toFixed(2));
+	        	$('#precioventa').val(varTotalDescuento.toFixed(2));
 			})
 		})
 		.fail(function(data)
@@ -243,6 +364,11 @@ $(document).on('change','#proyectos',function(){
 	document.getElementById('inmueble').options.length = 0;
 	//$('#inmuebles').empty();
 	cargarInmueble();
+});
+
+$("#cboCliente").on("change",function(){
+	$('#hcliente').val($('#cboCliente').val());
+	cargarDatosCliente();
 });
 
 $(document).on('change','#inmueble',function(){
@@ -327,7 +453,14 @@ $(document).ready(function()
 	if($('#proyectos').length > 0)
 		cargarProyecto();
 	if($('#cliente').length > 0)
+	{
 		cargarClientes();
+		if($('#hcliente').val() != 0 && $('#hcliente').val() != '') {
+			$("#cboCliente").val($('#hcliente').val());
+			cargarDatosCliente();
+		}
+		
+	}
 	if($('#tiposinmueble').length > 0)
 		cargarTipoInmueble();
 	if($('#inmueble').length > 0)
@@ -357,6 +490,8 @@ $(document).ready(function()
 	 	$("#tipocambioneg").prop('readonly',false);
 	 	
 	}
+
+	calcularEdad($("#fecnacimiento").val());
 
 });
 
@@ -390,12 +525,22 @@ $(document).on('click','#btnAgregar',function()
 				$('#txtTotalDecimal').val("0");	
 			}
 			varTotal = parseFloat($('#txtTotalDecimal').val())+parseFloat(varMonto);
+			if($('#montodescuento').val() != 0) {
+				varTotalDescuento = varTotal - parseFloat($('#montodescuento').val());
+				if(varTotalDescuento < 0) {
+			    	varTotalDescuento = 0;
+			    }
+			}
+			else {
+				varTotalDescuento = varTotal;
+			}
+
 			if (!existeProducto(newArray))
 			{
 				newArray.push({ idnegociacion: $("#idnegociacion").val(), idinmueble: varCodInmueble, tipo: $('#htipoinmueble').val(), modelo:$('#hmodelo').val(), monto: varMonto });
 	        	llenarTablaLocal("gvProductos", $.parseJSON(JSON.stringify(newArray)));
 	        	$('#txtTotalDecimal').val(varTotal.toFixed(6));
-	        	$('#precioventa').val(varTotal.toFixed(2));
+	        	$('#precioventa').val(varTotalDescuento.toFixed(2));
 
 	        	//$('#nodocumento').val("");
 				$('#monto').val("");
@@ -442,11 +587,38 @@ $(document).on("click", "#gvProductos > tbody > tr > td > a > .glyphicon-trash",
         return true;
     })
     varTotal = parseFloat($('#txtTotalDecimal').val())-parseFloat(varMonto);
+    if($('#montodescuento').val() != 0) {
+		varTotalDescuento = varTotal - parseFloat($('#montodescuento').val());
+		if(varTotalDescuento < 0) {
+	    	varTotalDescuento = 0;
+	    }
+	}
+	else {
+		varTotalDescuento = varTotal;
+	}
     $('#txtTotalDecimal').val(varTotal);
-    $('#precioventa').val(varTotal.toFixed(2));
+    $('#precioventa').val(varTotalDescuento.toFixed(2));
     llenarTablaLocal("gvProductos", $.parseJSON(JSON.stringify(newArray)));  
     recalcularMontos();  
     $("#tablainmuebles").val(JSON.stringify(newArray));
+});
+
+$(document).on('change','#montodescuento',function(){
+	if($('#txtTotalDecimal').val() != 0) {
+		varTotal = parseFloat($('#txtTotalDecimal').val())               
+	    if($('#montodescuento').val() != 0) {
+			varTotalDescuento = varTotal - parseFloat($('#montodescuento').val());
+			if(varTotalDescuento < 0) {
+		    	varTotalDescuento = 0;
+		    }
+		}
+		else {
+			varTotalDescuento = varTotal;
+		}
+		$('#txtTotalDecimal').val(varTotal.toFixed(6));
+		$('#precioventa').val(varTotalDescuento.toFixed(2));
+		recalcularMontos();
+	}
 });
 
 function obtenerValorCol(btn, Campo)
@@ -547,3 +719,23 @@ $(document).on('click','#otrosduenos',function()
 	                                   {
 	                                   		window.location=base_url+"movimientos/negociacion/enviarMail/"+$('#idnegociacion').val();
 	                                   });*/
+
+
+$("#dpFecha").on('dp.change', function () {
+    calcularEdad($("#dpFecha > input").val());
+});
+
+
+function calcularEdad(fecha) {
+    var hoy = new Date();
+    var cumpleanos = new Date(fecha);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+    }
+
+    if(edad > 0)
+    $("#edad").val(edad);
+}

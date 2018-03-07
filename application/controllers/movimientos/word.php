@@ -398,6 +398,10 @@ class word extends MY_Controller
 
 			$datosCliente = $this->mword->getContratoReserva($idnegociacion);
 
+			if(!$datosCliente) {
+				$datosCliente = $this->mword->getContratoReservaTemporal($idnegociacion);
+			}
+
 			$datosInmuebles = $this->mword->getDetInmueblesNegociacion($idnegociacion);
 
 			$precioMt2Inmueble = $this->mword->getMontoMt2TipoInmueble($idnegociacion);
@@ -517,105 +521,108 @@ class word extends MY_Controller
 			/// **************** OTROS COMPRADORES ******************
 
 			$datosCliente = $this->mword->getContratoReservaOtrCompradores($idnegociacion);
-
+			//echo json_encode($datosCliente);
 			if($datosCliente)
-
 			{
-
-				foreach ($datosCliente as $dato) {
-
-					$document->setValue('NombreClienteOtr',utf8_decode($dato->nombre));
-
-					$document->setValue('ApellidoClienteOtr',utf8_decode($dato->apellido));
-
-					$document->setValue('NitOtr',$dato->nit);
-
-					$document->setValue('DiaNacOtr',Date('d',strtotime($dato->fecnacimiento)));
-
-					$document->setValue('MesNacOtr',Date('m',strtotime($dato->fecnacimiento)));
-
-					$document->setValue('AnioNacOtr',Date('Y',strtotime($dato->fecnacimiento)));
-
-					$document->setValue('EdadOtr',$this->edad($dato->fecnacimiento));
-
-					$document->setValue('EstadoCivilOtr',utf8_decode($dato->estadocivil));
-
-					$document->setValue('DpiOtr',$dato->dpi);
-
-					$document->setValue('ProfesionOtr',utf8_decode($dato->profesion));
-
-					$document->setValue('CorreoOtr',utf8_decode($dato->email));
-
-					$document->setValue('CelularOtr',utf8_decode($dato->celular));
-
-					$document->setValue('TelefonoOtr',utf8_decode($dato->telefono));
-
-					$document->setValue('DomicilioOtr',utf8_decode($dato->dirresidencia));
+					$document->setValue('NombreClienteOtr',utf8_decode($datosCliente->nombre));
+					$document->setValue('ApellidoClienteOtr',utf8_decode($datosCliente->apellido));
+					$document->setValue('NitOtr',$datosCliente->nit);
+					$document->setValue('DiaNacOtr',Date('d',strtotime($datosCliente->fecnacimiento)));
+					$document->setValue('MesNacOtr',Date('m',strtotime($datosCliente->fecnacimiento)));
+					$document->setValue('AnioNacOtr',Date('Y',strtotime($datosCliente->fecnacimiento)));
+					$document->setValue('EdadOtr',$this->edad($datosCliente->fecnacimiento));
+					$document->setValue('EstadoCivilOtr',utf8_decode($datosCliente->estadocivil));
+					$document->setValue('DpiOtr',$datosCliente->dpi);
+					$document->setValue('ProfesionOtr',utf8_decode($datosCliente->profesion));
+					$document->setValue('CorreoOtr',utf8_decode($datosCliente->email));
+					$document->setValue('CelularOtr',utf8_decode($datosCliente->celular));
+					$document->setValue('TelefonoOtr',utf8_decode($datosCliente->telefono));
+					$document->setValue('DomicilioOtr',utf8_decode($datosCliente->dirresidencia));
 
 
-
-					$document->setValue('LugarTrabajoOtr',utf8_decode($dato->lugartrabajo));
-
-					$document->setValue('TiempoLaborOtr',utf8_decode($dato->tiempolabor));
-
-					$document->setValue('DirTrabajoOtr',utf8_decode($dato->dirtrabajo));
-
-					$document->setValue('PuestoOtr',utf8_decode($dato->puesto));
-
-					$document->setValue('IngresosOtr',utf8_decode($dato->ingresos));
-
-					$document->setValue('OtrosIngresoOtr',utf8_decode($dato->otrosingresos));
-
-				}
-
+					$document->setValue('LugarTrabajoOtr',utf8_decode($datosCliente->lugartrabajo));
+					$document->setValue('TiempoLaborOtr',utf8_decode($datosCliente->tiempolabor));
+					$document->setValue('DirTrabajoOtr',utf8_decode($datosCliente->dirtrabajo));
+					$document->setValue('PuestoOtr',utf8_decode($datosCliente->puesto));
+					$document->setValue('IngresosOtr',utf8_decode($datosCliente->ingresos));
+					$document->setValue('OtrosIngresoOtr',utf8_decode($datosCliente->otrosingresos));
 			}
 
 			else
 
 			{
-
-				$document->setValue('NombreClienteOtr','');
-
-				$document->setValue('ApellidoClienteOtr','');
-
-				$document->setValue('NitOtr','');
-
-				$document->setValue('DiaNacOtr','');
-
-				$document->setValue('MesNacOtr','');
-
-				$document->setValue('AnioNacOtr','');
-
-				$document->setValue('EdadOtr','');
-
-				$document->setValue('EstadoCivilOtr','');
-
-				$document->setValue('DpiOtr','');
-
-				$document->setValue('ProfesionOtr','');
-
-				$document->setValue('CorreoOtr','');
-
-				$document->setValue('CelularOtr','');
-
-				$document->setValue('TelefonoOtr','');
-
-				$document->setValue('DomicilioOtr','');
+				$datosCliente = $this->mword->getContratoReservaOtrCompradoresTemp($idnegociacion);
+				//echo json_encode($datosCliente);
+				if($datosCliente)
+				{
+						$document->setValue('NombreClienteOtr',utf8_decode($datosCliente->nombre));
+						$document->setValue('ApellidoClienteOtr',utf8_decode($datosCliente->apellido));
+						$document->setValue('NitOtr',$datosCliente->nit);
+						$document->setValue('DiaNacOtr',Date('d',strtotime($datosCliente->fecnacimiento)));
+						$document->setValue('MesNacOtr',Date('m',strtotime($datosCliente->fecnacimiento)));
+						$document->setValue('AnioNacOtr',Date('Y',strtotime($datosCliente->fecnacimiento)));
+						$document->setValue('EdadOtr',$this->edad($datosCliente->fecnacimiento));
+						$document->setValue('EstadoCivilOtr',utf8_decode($datosCliente->estadocivil));
+						$document->setValue('DpiOtr',$datosCliente->dpi);
+						$document->setValue('ProfesionOtr',utf8_decode($datosCliente->profesion));
+						$document->setValue('CorreoOtr',utf8_decode($datosCliente->email));
+						$document->setValue('CelularOtr',utf8_decode($datosCliente->celular));
+						$document->setValue('TelefonoOtr',utf8_decode($datosCliente->telefono));
+						$document->setValue('DomicilioOtr',utf8_decode($datosCliente->dirresidencia));
 
 
+						$document->setValue('LugarTrabajoOtr',utf8_decode($datosCliente->lugartrabajo));
+						$document->setValue('TiempoLaborOtr',utf8_decode($datosCliente->tiempolabor));
+						$document->setValue('DirTrabajoOtr',utf8_decode($datosCliente->dirtrabajo));
+						$document->setValue('PuestoOtr',utf8_decode($datosCliente->puesto));
+						$document->setValue('IngresosOtr',utf8_decode($datosCliente->ingresos));
+						$document->setValue('OtrosIngresoOtr',utf8_decode($datosCliente->otrosingresos));
+				}
+				else
+				{
 
-				$document->setValue('LugarTrabajoOtr','');
+					$document->setValue('NombreClienteOtr','');
 
-				$document->setValue('TiempoLaborOtr','');
+					$document->setValue('ApellidoClienteOtr','');
 
-				$document->setValue('DirTrabajoOtr','');
+					$document->setValue('NitOtr','');
 
-				$document->setValue('PuestoOtr','');
+					$document->setValue('DiaNacOtr','');
 
-				$document->setValue('IngresosOtr','');
+					$document->setValue('MesNacOtr','');
 
-				$document->setValue('OtrosIngresoOtr','');
+					$document->setValue('AnioNacOtr','');
 
+					$document->setValue('EdadOtr','');
+
+					$document->setValue('EstadoCivilOtr','');
+
+					$document->setValue('DpiOtr','');
+
+					$document->setValue('ProfesionOtr','');
+
+					$document->setValue('CorreoOtr','');
+
+					$document->setValue('CelularOtr','');
+
+					$document->setValue('TelefonoOtr','');
+
+					$document->setValue('DomicilioOtr','');
+
+
+
+					$document->setValue('LugarTrabajoOtr','');
+
+					$document->setValue('TiempoLaborOtr','');
+
+					$document->setValue('DirTrabajoOtr','');
+
+					$document->setValue('PuestoOtr','');
+
+					$document->setValue('IngresosOtr','');
+
+					$document->setValue('OtrosIngresoOtr','');
+				}
 			}
 
 
@@ -731,6 +738,10 @@ class word extends MY_Controller
 			$this->load->model('mword');
 
 			$datosCliente = $this->mword->getContratoReserva($idnegociacion);
+
+			if(!$datosCliente) {
+				$datosCliente = $this->mword->getContratoReservaTemporal($idnegociacion);
+			}
 
 			$datosInmuebles = $this->mword->getDetInmueblesNegociacion($idnegociacion);
 
@@ -848,72 +859,72 @@ class word extends MY_Controller
 
 			}
 
-
-
+			// Otros clientes
 			$datosCliente = $this->mword->getContratoPromesa1($idnegociacion);
-
 			foreach ($datosCliente as $dato) {
-
-				//$textoclientes = $textoclientes."\n";			 
 
 				$textoclientes = $textoclientes."</w:t></w:r></w:p><w:p w:rsidR='00FB4413' w:rsidRDefault='001C2841'><w:pPr><w:pStyle w:val='Cuerpo'/><w:widowControl w:val='0'/><w:numPr><w:ilvl w:val='0'/><w:numId w:val='6'/></w:numPr><w:ind w:left='375' w:hanging='349'/><w:jc w:val='both'/><w:rPr><w:rFonts w:ascii='Arial Narrow' w:hAnsi='Arial Narrow' w:cs='Arial Narrow'/><w:sz w:val='21'/><w:szCs w:val='21'/></w:rPr></w:pPr><w:r><w:rPr><w:rFonts w:ascii='Arial Narrow' w:hAnsi='Arial Narrow' w:cs='Arial Narrow'/><w:sz w:val='21'/><w:szCs w:val='21'/></w:rPr><w:t>";
 
-
-
 				$nombrecompleto = $dato->nombre." ".$dato->apellido;
-
 				/*$nombrefirma = $nombrefirma."</w:t></w:r></w:p>    <w:p w:rsidR='00FB4413' w:rsidRDefault='001C2841'><w:pPr><w:pStyle w:val='Cuerpo'/><w:widowControl w:val='0'/><w:jc w:val='both'/><w:rPr><w:rFonts w:ascii='Arial Narrow' w:hAnsi='Arial Narrow' w:cs='Arial Narrow'/><w:sz w:val='21'/><w:szCs w:val='21'/></w:rPr></w:pPr><w:r><w:rPr><w:rFonts w:ascii='Arial Narrow' w:hAnsi='Arial Narrow' w:cs='Arial Narrow'/><w:sz w:val='21'/><w:szCs w:val='21'/></w:rPr><w:t>".$nombrecompleto;*/
-
 				$nombrefirma = $nombrefirma."</w:t></w:r></w:p>
-
 				<w:p w:rsidR='00FB4413' w:rsidRDefault='00FB4413'></w:p>
-
 				<w:p w:rsidR='00FB4413' w:rsidRDefault='00FB4413'></w:p>
-
 				<w:p w:rsidR='00FB4413' w:rsidRDefault='00FB4413'></w:p>
-
 				<w:p w:rsidR='00FB4413' w:rsidRDefault='00FB4413'></w:p>
-
 				<w:p w:rsidR='00FB4413' w:rsidRDefault='001C2841'>					
-
 					<w:r>
-
 						<w:rPr>
-
 							<w:rFonts w:ascii='Arial Narrow' w:hAnsi='Arial Narrow' w:cs='Arial Narrow'/>
-
 							<w:b/>
-
 							<w:sz w:val='21'/>
-
 							<w:szCs w:val='21'/>
-
 						</w:rPr>
-
 					<w:t>".$nombrecompleto;
 
+				$textoclientes = $textoclientes.$nombrecompleto.", de ".strtolower($this->toText($this->edad($dato->fecnacimiento)))." años, ".$dato->estadocivil.", ".$dato->profesion;
+				$textoclientes = $textoclientes.", ".$dato->nacionalidad.", con domicilio en ".$dato->dirresidencia.", y me identifico con el Documento Personal de Identificación con Código Único de Identificación número ";
+				$textoclientes = $textoclientes.$dato->dpi.", extendido por el Registro Nacional de las Personas de la República de Guatemala, y comparezco ";
+				if($dato->clientejuridico == 1) {
+					$textoclientes = $textoclientes."en nombre propio.";					
+				}else if($dato->clientejuridico == 2) {					
+					$textoclientes = $textoclientes."en su calidad de ".$dato->especifiquejuridico." calidad que acredita con ".$dato->nombramientojuridico.".";
+				}
+				$textoclientes = $textoclientes." En el curso del presente contrato se me podrá denominar simplemente como el \"PROMITENTE COMPRADOR\".";				
+			}
+
+			// Otros clientes temporales
+			$datosCliente = $this->mword->getContratoPromesa1Temp($idnegociacion);
+			foreach ($datosCliente as $dato) {
+
+				$textoclientes = $textoclientes."</w:t></w:r></w:p><w:p w:rsidR='00FB4413' w:rsidRDefault='001C2841'><w:pPr><w:pStyle w:val='Cuerpo'/><w:widowControl w:val='0'/><w:numPr><w:ilvl w:val='0'/><w:numId w:val='6'/></w:numPr><w:ind w:left='375' w:hanging='349'/><w:jc w:val='both'/><w:rPr><w:rFonts w:ascii='Arial Narrow' w:hAnsi='Arial Narrow' w:cs='Arial Narrow'/><w:sz w:val='21'/><w:szCs w:val='21'/></w:rPr></w:pPr><w:r><w:rPr><w:rFonts w:ascii='Arial Narrow' w:hAnsi='Arial Narrow' w:cs='Arial Narrow'/><w:sz w:val='21'/><w:szCs w:val='21'/></w:rPr><w:t>";
+
+				$nombrecompleto = $dato->nombre." ".$dato->apellido;
 				
+				$nombrefirma = $nombrefirma."</w:t></w:r></w:p>
+				<w:p w:rsidR='00FB4413' w:rsidRDefault='00FB4413'></w:p>
+				<w:p w:rsidR='00FB4413' w:rsidRDefault='00FB4413'></w:p>
+				<w:p w:rsidR='00FB4413' w:rsidRDefault='00FB4413'></w:p>
+				<w:p w:rsidR='00FB4413' w:rsidRDefault='00FB4413'></w:p>
+				<w:p w:rsidR='00FB4413' w:rsidRDefault='001C2841'>					
+					<w:r>
+						<w:rPr>
+							<w:rFonts w:ascii='Arial Narrow' w:hAnsi='Arial Narrow' w:cs='Arial Narrow'/>
+							<w:b/>
+							<w:sz w:val='21'/>
+							<w:szCs w:val='21'/>
+						</w:rPr>
+					<w:t>".$nombrecompleto;
 
 				$textoclientes = $textoclientes.$nombrecompleto.", de ".strtolower($this->toText($this->edad($dato->fecnacimiento)))." años, ".$dato->estadocivil.", ".$dato->profesion;
-
 				$textoclientes = $textoclientes.", ".$dato->nacionalidad.", con domicilio en ".$dato->dirresidencia.", y me identifico con el Documento Personal de Identificación con Código Único de Identificación número ";
-
 				$textoclientes = $textoclientes.$dato->dpi.", extendido por el Registro Nacional de las Personas de la República de Guatemala, y comparezco ";
-
 				if($dato->clientejuridico == 1) {
-
 					$textoclientes = $textoclientes."en nombre propio.";					
-
 				}else if($dato->clientejuridico == 2) {					
-
 					$textoclientes = $textoclientes."en su calidad de ".$dato->especifiquejuridico." calidad que acredita con ".$dato->nombramientojuridico.".";
-
 				}
-
 				$textoclientes = $textoclientes." En el curso del presente contrato se me podrá denominar simplemente como el \"PROMITENTE COMPRADOR\".";				
-
-				
-
 			}
 
 			$document->setValue('NombreFirma',utf8_decode($nombrefirma));
@@ -1248,6 +1259,9 @@ class word extends MY_Controller
 
 			//////////////////  CLIENTES  /////////////////
 			$datosCliente = $this->mword->getContratoReserva($idnegociacion);
+			if(!$datosCliente) {
+				$datosCliente = $this->mword->getContratoReservaTemporal($idnegociacion);
+			}
 			$textoclientes = "";
 			$tipocambioneg = 0;
 			foreach ($datosCliente as $dato) {
@@ -1310,8 +1324,8 @@ class word extends MY_Controller
 
 
 			////////////////  FORMA DE PAGO  //////////////////
-			$formapago = $this->mword->getFormaPagoNegociacion($idnegociacion);
-			$document->setValue("FormaPago",utf8_decode($formapago->descripcion));
+			//$formapago = $this->mword->getFormaPagoNegociacion($idnegociacion);
+			//$document->setValue("FormaPago",utf8_decode($formapago->descripcion));
 
 
 			// Guarda y cierra el documento
@@ -1330,10 +1344,16 @@ class word extends MY_Controller
 
 	public function edad($fecha){
 	    $fecha = str_replace("/","-",$fecha);
-	    $fecha = date('Y/m/d',strtotime($fecha));
+
+	    list($Y,$m,$d) = explode("-",$fecha);
+    	return( date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y );
+	    
+	    /*$fecha = date('Y/m/d',strtotime($fecha));
 	    $hoy = date('Y/m/d');
+	    		echo $hoy - $fecha;
+		exit();
 	    $edad = $hoy - $fecha;
-	    return $edad;
+	    return $edad;*/
 	}
 
 	public function conversionMonto($moneda,$monto,$tipocambio,$textomoneda) {
@@ -1422,8 +1442,8 @@ class word extends MY_Controller
 
         if($wdecimal == true){
         	
-        	$decimalNumber = floor($separate[1]);
-        	if($decimalNumber != 0) {
+        	$decimalNumber = floor($separate[0]);
+        	if($decimalNumber != 0 && isset($separate[1])) {
         		$Num2Text = $Num2Text." punto ".$this->toText($separate[1]);
         	}
         }

@@ -2,6 +2,7 @@
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 		<title><?php echo $page_title; ?></title>
     <!--esto es para que pueda obtener los js. la ruta inicial-->
     <base href='<?php echo base_url();?>' />
@@ -58,6 +59,8 @@
                 <li class="<?php echo $activo=='estadocuenta'?'active':''; ?>"><a href="<?php echo base_url().'reportes/estadocuentainv/repEstadoCuentaInv';?>">Estado de cuenta inversionistas</a></li>
               </ul>
             </li>
+
+            <li class="<?php echo $activo=='negporcliente'?'active':''; ?>"><a href="<?php echo base_url().'reportes/negporcliente/repNegPorCliente';?>">Negociaciones de clientes</a></li>
       
           </ul>
         

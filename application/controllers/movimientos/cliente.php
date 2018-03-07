@@ -12,7 +12,11 @@ class cliente extends MY_Controller
 		}
 		else
 		{
+			$this->load->model('musuarioadmin');
+			$datosusuario = $this->musuarioadmin->getUsuarioLogin($this->session->userdata('user_id'));
+
 			$this->view_data['usuario']= $this->session->userdata('user_id');
+			$this->view_data['datosusuario'] = $datosusuario;
 		}
 
 	}
@@ -342,6 +346,14 @@ class cliente extends MY_Controller
 	{
 		$this->load->model('mcliente');
 		$cliente = $this->mcliente->getClientes();	
+		$this->output->set_content_type('application/json');
+		$this->output->set_output(json_encode($cliente));
+	}
+
+	public function getClienteId($idcliente=-1)
+	{
+		$this->load->model('mcliente');
+		$cliente = $this->mcliente->getClienteId($idcliente);	
 		$this->output->set_content_type('application/json');
 		$this->output->set_output(json_encode($cliente));
 	}
