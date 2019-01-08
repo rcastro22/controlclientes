@@ -154,6 +154,8 @@ function cargarModelo()
 
 function cargarInmueble()
 {
+	var datosj = new Array();
+
 	$.get(
 			base_url + 'catalogos/inmueble/getInmuebleDisponible/'+$('#hproyecto').val()				
 		)
@@ -178,6 +180,18 @@ function cargarInmueble()
 				$option.html(linea.idinmueble);
 				$('#inmueble').append($option);
 			})
+
+			datos = data;
+            for (i = 0; i < datos.length; i++)
+            {
+                datosj[i] = { id: datos[i].idinmueble, text: datos[i].idinmueble + ' - ' + datos[i].nombreTipoInmueble + ' - ' + datos[i].nombreModelo};
+            }
+            $("#cboInmueble").select2({
+            	placeholder: "Seleccione inmueble",
+                allowClear: true,
+                data: datosj,
+                width: '100%'
+            });
 		})
 		.fail(function(data)
 		{
@@ -211,8 +225,9 @@ function cargarDatosCliente() {
 				$('#puesto').val(data.puesto);
 				$('#ingresos').val(data.ingresos);
 				$('#otrosingresos').val(data.otrosingresos);
+				$('#depdirres').val(data.depdirres);
 
-				$('#nombre').attr('readonly','true');
+				/*$('#nombre').attr('readonly','true');
 				$('#apellido').attr('readonly','true');
 				$('#nit').attr('readonly','true');
 				$('#fecnacimiento').attr('readonly','true');
@@ -230,6 +245,7 @@ function cargarDatosCliente() {
 				$('#puesto').attr('readonly','true');
 				$('#ingresos').attr('readonly','true');
 				$('#otrosingresos').attr('readonly','true');
+				$('#depdirres').attr('readonly','true');*/
 			}
 			else {
 				$('#nombre').val('');
@@ -250,6 +266,7 @@ function cargarDatosCliente() {
 				$('#puesto').val('');
 				$('#ingresos').val('');
 				$('#otrosingresos').val('');
+				$('#depdirres').val('');
 
 				$('#nombre').removeAttr('readonly');
 				$('#apellido').removeAttr('readonly');
@@ -269,6 +286,7 @@ function cargarDatosCliente() {
 				$('#puesto').removeAttr('readonly');
 				$('#ingresos').removeAttr('readonly');
 				$('#otrosingresos').removeAttr('readonly');
+				$('#depdirres').removeAttr('readonly');
 			}
 		})
 		.fail(function(data)
@@ -334,7 +352,7 @@ function cargarDetalleNegociacion()
 				else {
 					varTotalDescuento = varTotal;
 				}
-				newArray.push({ idnegociacion: $("#idnegociacion").val(), idinmueble: linea.idinmueble, tipo: linea.tipo, modelo:linea.modelo, monto: linea.valor });
+				newArray.push({ idnegociacion: $("#idnegociacion").val(), idinmueble: linea.idinmueble, tipo: linea.tipo, modelo:linea.modelo, monto: linea.valor, preciobase: linea.preciobase, gastoslegales: linea.gastoslegales, observacionapto: linea.observacionapto, idproyecto:$('#hproyecto').val() });
 	        	llenarTablaLocal("gvProductos", $.parseJSON(JSON.stringify(newArray)));
 	        	$('#txtTotalDecimal').val(varTotal.toFixed(6));
 	        	$('#precioventa').val(varTotalDescuento.toFixed(2));
@@ -397,6 +415,30 @@ $(document).on('change','#inmueble',function(){
 		cargarTipoInmueble();
 		document.getElementById('modelo').options.length = 0;
 		cargarModelo();
+});
+
+$("#cboInmueble").on("change",function(){
+	$('#hinmueble').val($('#cboInmueble').val());
+	$.get(
+			base_url + 'catalogos/inmueble/getInmuebleId/'+$('#hinmueble').val()+'/'+$('#hproyecto').val()		
+		)
+		.done(function(data)
+		{
+			$.each(data,function(i,linea)
+			{
+				//alert(linea.nombreTipoInmueble);
+				
+				$('#tamano').val(linea.tamano);
+				$('#dormitorios').val(linea.dormitorios);
+
+				$('#htipoinmueble').val(linea.nombreTipoInmueble);
+				$('#hmodelo').val(linea.nombreModelo);
+			})
+		})
+		.fail(function(data)
+		{
+			console.log('error datos!!!');
+		});
 });
 
 function recalcularMontos()
@@ -498,10 +540,14 @@ $(document).ready(function()
 
 $(document).on('click','#btnAgregar',function()
 {
-	var varCodInmueble=$('#inmueble').val();
+	var varCodInmueble=$('#hinmueble').val();
 	//var varDescripcionFormapago=$('#formapago option:selected').text();
 	//var varNodocumento=$('#nodocumento').val();
 	var varMonto=$('#monto').val();
+	var varPrecioBase=$('#preciobase').val();
+	var varGastosLegales=$('#gastoslegales').val();
+
+	var varObservaciones=$('#observacionapto').val();
 	//var varObservaciones=$('#observaciones').val();
 	//var varfechapago = new Date();
 	var varfechapago = "2014-11-29";
@@ -510,11 +556,14 @@ $(document).on('click','#btnAgregar',function()
 	var varTipoPeso=$('input:radio[name=rTipoMedida]:checked').val();
 	var varGrOz=varTipoPeso==1?"Gramos":"Onzas"
 	var varConversion=0;
-	if(varCodInmueble=="" || varCodInmueble==null || varMonto =="")
+	if(varCodInmueble=="" || varCodInmueble==null || varMonto =="" || varPrecioBase=="" || varGastosLegales=="")
 	{
 		 $('#divAlerta1').empty();
 		 $('#divAlerta1').append("No se puede agregar el pago, todos los campos son obligatorios");
 		 $('#divAlerta1').show();
+	}
+	else if(isNaN(parseFloat(varMonto)) || isNaN(parseFloat(varPrecioBase)) || isNaN(parseFloat(varGastosLegales))) {
+		alert("El formato de los montos es incorrecto");
 	}
 	else
 	{
@@ -537,13 +586,16 @@ $(document).on('click','#btnAgregar',function()
 
 			if (!existeProducto(newArray))
 			{
-				newArray.push({ idnegociacion: $("#idnegociacion").val(), idinmueble: varCodInmueble, tipo: $('#htipoinmueble').val(), modelo:$('#hmodelo').val(), monto: varMonto });
+				newArray.push({ idnegociacion: $("#idnegociacion").val(), idinmueble: varCodInmueble, tipo: $('#htipoinmueble').val(), modelo:$('#hmodelo').val(), monto: parseFloat(varMonto), preciobase: parseFloat(varPrecioBase), gastoslegales: parseFloat(varGastosLegales), observacionapto: varObservaciones, idproyecto:$('#hproyecto').val() });
 	        	llenarTablaLocal("gvProductos", $.parseJSON(JSON.stringify(newArray)));
 	        	$('#txtTotalDecimal').val(varTotal.toFixed(6));
 	        	$('#precioventa').val(varTotalDescuento.toFixed(2));
 
 	        	//$('#nodocumento').val("");
 				$('#monto').val("");
+				$('#preciobase').val("");
+				$('#gastoslegales').val("");
+				$('#observacionapto').val("");
 				recalcularMontos();
 				$("#tablainmuebles").val(JSON.stringify(newArray));
 				//$('#observaciones').val("");
@@ -551,7 +603,7 @@ $(document).on('click','#btnAgregar',function()
 	}
 	//txtTotal.focus();
 
-	$("#inmueble").focus();
+	$("#cboInmueble").focus();
 });
 
 function existeProducto(array)
@@ -569,7 +621,7 @@ function existeProducto(array)
     return existe;
 }
 
-$(document).on("click", "#gvProductos > tbody > tr > td > a > .glyphicon-trash", function (event)
+$(document).on("click", "#gvProductos > tbody > tr > td > .glyphicon-trash", function (event)
 {	
 	//var varidnegociacion = obtenerValorCol(this, "idnegociacion");
     var varCodInmueble = obtenerValorCol(this, "idinmueble");
@@ -623,9 +675,9 @@ $(document).on('change','#montodescuento',function(){
 
 function obtenerValorCol(btn, Campo)
 {
-    var Indice = $(btn).parent().parent().parent().parent().prev().find("tr > th[data-campo=" + Campo + "]").index();
+    var Indice = $(btn).parent().parent().parent().prev().find("tr > th[data-campo=" + Campo + "]").index();
 
-    var codigo = $(btn).parent().parent().parent().children('td:eq(' + Indice + ')').text();
+    var codigo = $(btn).parent().parent().children('td:eq(' + Indice + ')').text();
 
     return codigo;
 }

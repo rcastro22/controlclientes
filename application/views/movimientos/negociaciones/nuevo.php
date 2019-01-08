@@ -30,6 +30,7 @@
 						
 							<input type="hidden" name="tablainmuebles" id="tablainmuebles" value="<?php echo $datosnegociacion->tablai; ?>" />
 							<input type="hidden" name="tablaotros" id="tablaotros" value="<?php echo $datosnegociacion->tablaotros; ?>" />
+							<input type="hidden" name="tablacuotas" id="tablacuotas" value="<?php echo $datosnegociacion->tablacuotas; ?>" />
 
 							<div class="row">
 								<div class="col-lg-12">
@@ -150,13 +151,20 @@
 														<?php echo form_error('celular','<div class="help-block" >','</div>'); ?>
 													</div>
 												</div>	
-												<div class="col-lg-8">
+												<div class="col-lg-6">
 													<div class="form-group <?php if(form_error('direccion')) echo 'has-error'; ?>">
 														<label class="control-label" for="name"> Dirección *: </label>
 														<input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo set_value('direccion'); ?>" />
 														<?php echo form_error('direccion','<div class="help-block" >','</div>'); ?>
 													</div>
-												</div>					
+												</div>			
+												<div class="col-lg-2">
+													<div class="form-group <?php if(form_error('depdirres')) echo 'has-error'; ?>">
+														<label class="control-label" for="name"> Departamento *: </label>
+														<input type="text" class="form-control" name="depdirres" id="depdirres" value="<?php echo set_value('depdirres'); ?>" maxlength="25" />
+														<?php echo form_error('depdirres','<div class="help-block" >','</div>'); ?>
+													</div>
+												</div>		
 											</div>
 											<br/><br/><br/>
 										</div>
@@ -291,7 +299,7 @@
 											<div class="row">
 												<div class="col-lg-11">
 													<div class="row">
-														<div class="col-lg-6">
+														<div class="col-lg-3">
 															<div class="form-group">
 																<input type="hidden" name="hinmueble" id="hinmueble" value="<?php echo $datosnegociacion->idinmueble; ?>" />
 																<label class="control-label" for="name"> Inmueble: </label>
@@ -299,7 +307,7 @@
 																<input type="hidden" name="cboInmueble" id="cboInmueble">
 															</div>
 														</div>
-														<div class="col-lg-6">
+														<div class="col-lg-3">
 															<div class="form-group <?php if(form_error('monto')) echo 'has-error'; ?>">
 																<label class="control-label" for="name"> Valor inmueble: </label>
 																<div class="input-group">
@@ -309,6 +317,36 @@
 																</div>
 															</div>
 														</div>
+														<div class="col-lg-3">
+															<div class="form-group <?php if(form_error('preciobase')) echo 'has-error'; ?>">
+																<label class="control-label" for="name"> Precio Base: </label>
+																<div class="input-group">
+																	<span id="spanpreciobase" name="spanpreciobase" class="input-group-addon">$.</span>
+																	<strong><input class="form-control" type="text" name="preciobase" id="preciobase" value="<?php echo set_value('preciobase'); ?>" maxlength="10"></strong>
+																	<?php echo form_error('preciobase','<div class="help-block" >','</div>'); ?>
+																</div>
+															</div>
+														</div>
+														<div class="col-lg-3">
+															<div class="form-group <?php if(form_error('gastoslegales')) echo 'has-error'; ?>">
+																<label class="control-label" for="name"> Gastos Legales: </label>
+																<div class="input-group">
+																	<span id="spangastoslegales" name="spangastoslegales" class="input-group-addon">$.</span>
+																	<strong><input class="form-control" type="text" name="gastoslegales" id="gastoslegales" value="<?php echo set_value('gastoslegales'); ?>" maxlength="10"></strong>
+																	<?php echo form_error('gastoslegales','<div class="help-block" >','</div>'); ?>
+																</div>
+															</div>
+														</div>
+														<!--<div class="col-lg-12">
+															<div class="form-group <?php if(form_error('observacionapto')) echo 'has-error'; ?>">
+																<label class="control-label" for="name"> Observaciones: </label>
+																<div class="input-group">
+																	<span id="spanobservacionapto" name="spanobservacionapto" class="input-group-addon">$.</span>
+																	<strong><input class="form-control" type="text" name="observacionapto" id="observacionapto" value="<?php echo set_value('observacionapto'); ?>" maxlength="150"></strong>
+																	<?php echo form_error('observacionapto','<div class="help-block" >','</div>'); ?>
+																</div>
+															</div>
+														</div>-->
 													</div>
 												</div>
 
@@ -339,6 +377,9 @@
 								                                    <th data-tipo="string" data-campo="tipo" data-alineacion="centro" style="text-align: center">Tipo inmueble</th>
 								                                    <th data-tipo="string" data-campo="modelo" data-alineacion="centro" style="text-align: center">Modelo</th>
 								                                    <th data-tipo="decimal" data-formato="#,###,###.##" data-campo="monto" data-alineacion="centro" style="text-align: center">Monto</th>
+								                                    <th data-tipo="decimal" data-formato="#,###,###.##" data-campo="preciobase" data-alineacion="centro" style="text-align: center">Precio Base</th>
+								                                    <th data-tipo="decimal" data-formato="#,###,###.##" data-campo="gastoslegales" data-alineacion="centro" style="text-align: center">Gastos Legales</th>
+								                                    <!--<th data-tipo="string" data-campo="observacionapto" data-alineacion="centro" style="text-align: center">Observaciones</th>-->
 								                                    <!--<th data-tipo="string" data-campo="observaciones" data-alineacion="centro" style="text-align: center">Observaciones</th>-->				                                    
 								                                    <th data-boton="borrar" data-alineacion="centro" style="text-align: center">Eliminar</th>
 								                                </tr>                            
@@ -452,14 +493,21 @@
 														<?php echo form_error('saldoenganche','<div class="help-block" >','</div>'); ?>										
 													</div>
 												</div>
-												<div class="col-lg-3">
+												<div class="col-lg-2">
+													<div class="form-group <?php if(form_error('fechaprimerpago')) echo 'has-error'; ?>">
+														<label class="control-label" for="name"> Fecha primer pago *: </label>
+														<input class="form-control" type="text" name="fechaprimerpago" id="fechaprimerpago" value="<?php echo set_value('fechaprimerpago'); ?>" maxlength="30">
+														<?php echo form_error('fechaprimerpago','<div class="help-block" >','</div>'); ?>
+													</div>
+												</div>
+												<div class="col-lg-2">
 													<div class="form-group <?php if(form_error('nocuotas')) echo 'has-error'; ?>">
 														<label class="control-label" for="name"> No. Cuotas *: </label>
 														<input class="form-control" type="text" name="nocuotas" id="nocuotas" value="<?php echo set_value('nocuotas'); ?>" maxlength="30">
 														<?php echo form_error('nocuotas','<div class="help-block" >','</div>'); ?>
 													</div>
 												</div>
-												<div class="col-lg-3">
+												<div class="col-lg-2">
 													<div class="form-group <?php if(form_error('cuotamensual')) echo 'has-error'; ?>">
 														<label class="control-label" for="name"> Cuota mensual *: </label>
 														<div class="input-group">
@@ -471,14 +519,13 @@
 												</div>
 											</div>
 
+											<div class="alert alert-warning alert-dismissible text-center" role="alert">
+												<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												<strong></strong> <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg">Ver detalle de cuotas</a>
+											</div>
+
 											<div class="row">
-												<div class="col-lg-3">
-													<div class="form-group <?php if(form_error('fechaprimerpago')) echo 'has-error'; ?>">
-														<label class="control-label" for="name"> Fecha primer pago *: </label>
-														<input class="form-control" type="text" name="fechaprimerpago" id="fechaprimerpago" value="<?php echo set_value('fechaprimerpago'); ?>" maxlength="30">
-														<?php echo form_error('fechaprimerpago','<div class="help-block" >','</div>'); ?>
-													</div>
-												</div>
+												
 												<div class="col-lg-3">
 													<div class="form-group <?php if(form_error('banco')) echo 'has-error'; ?>">
 														<label class="control-label" for="name"> Factura banco: </label>
@@ -501,6 +548,20 @@
 														<input class="form-control" type="text" name="comision" id="comision" value="<?php echo set_value('comision'); ?>" maxlength="30">
 														</div>
 														<?php echo form_error('comision','<div class="help-block" >','</div>'); ?>										
+													</div>
+												</div>
+												<div class="col-lg-3">
+													<div class="form-group">
+														<label for="" class="control-label">Calculo de montos 70-30</label>		
+														<div class="checkbox">												
+															<input type="checkbox" name="tipocalculo" id="tipocalculo" value="0" 
+															<?php  
+
+																	if($datosnegociacion->tipocalculo=="1")
+																		echo "checked";
+
+																	?>>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -585,6 +646,15 @@
                                                     </div>
                                                 </div>
                                             </div>
+											<div class="row">
+												<div class="col-lg-12">
+													<div class="form-group <?php if(form_error('observaciones')) echo 'has-error'; ?>">
+														<label for="observaciones" class="control-label">Observaciones</label>
+														<input type="text" class="form-control" name="observaciones" id="observaciones" value="<?php echo set_value('observaciones'); ?>" maxlength="150">
+														<?php echo form_error('observaciones','<div class="help-block" >','</div>'); ?>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -647,6 +717,82 @@
 		  	</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 	</div>
+	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="modalCuotas">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Detalle de cuotas</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-11">
+							<div>
+								<div class="row">
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label for="fechalimite" class="control-label">Fecha limite </label>
+											<input type="text" class="form-control" name="fechalimite" id="fechalimite" maxlength="10">
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label for="pagocalculado" class="control-label">Pago calculado </label>
+											<input type="text" class="form-control" name="pagocalculado" id="pagocalculado" maxlength="10">
+										</div>
+									</div>
+									<div class="col-lg-4">
+										<div class="form-group">
+											<label for="btnAgregarCuota" class="control-label"></label>
+											<button type="button" class="btn btn-success form-control" id="btnAgregarCuota">Agregar cuota</button>
+										</div>
+									</div>
+								</div>
+								<div class="row text-right">
+									<div class="col-lg-12">
+										<button type="button" class="btn text-right" id="btnEliminarCuota">Eliminar cuota</button>
+									</div>
+									
+								</div>
+								<div class="form-search pull-right" data-tabla="gvCuotas" style="padding: 10px;display:none;" >
+									<input type="text" class="search-query form-control" placeholder="Buscar" />
+								</div>
+								<table class="table table-bordered table-condensed table-hover table-striped" id="gvCuotas" data-orden="true" data-filtro="true" data-fuente="dtLlenar" data-seleccion="false">
+									<thead>
+										<tr>
+											<!--<th class="hide" data-tipo="string" data-campo="idnegociacion" data-alineacion="centro" style="text-align: center">Código negociacion</th>-->
+											<th data-tipo="string" data-campo="nopago" data-alineacion="centro" style="text-align: center">No. pago</th>
+											<th data-tipo="string" data-formato="dd/MM/yyyy" data-campo="fechalimite" data-alineacion="centro" style="text-align: center">Fecha limite de pago</th>
+											<th data-tipo="decimal" data-formato="#,###,###.##" data-campo="pagocalculado" data-alineacion="centro" style="text-align: center">Pago calculado</th>                                   
+											<!--<th data-boton="borrar" data-alineacion="centro" style="text-align: center">Eliminar</th>-->
+										</tr>                            
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+								<div class="text-center" style="display:none;">
+									<div class="pagination">
+										<ul class="pagination" data-tabla="gvCuotas" data-cantidad="100000000" data-grupo="8"></ul>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-7">
+										<strong><input style="display:none;" class="form-control form-control input-lg" type="text" name="txtTotalDecimal" id="txtTotalDecimal" style="text-align:right" readonly="true" value="<?php echo $datosnegociacion->total_tablai; ?>"></strong>
+									</div>
+									<div class="col-md-5">
+										<div id="circulo"></div>
+									</div>
+								</div>					                        
+							</div> 
+						</div>									
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<script src="<?php echo base_url().'assets/js/tabla.js';?>"></script> 
 	<script src="<?php echo base_url().'assets/js/movimientos/negociaciones/nuevo.js';?>"></script> 
 	<script src="<?php echo base_url().'assets/js/bootstrap-birthday.js';?>"></script>
@@ -657,6 +803,16 @@
 		$('#dpFecha').datetimepicker({'format':'YYYY-MM-DD'});
 		$('#fechaprimerpago').datepicker({'format':'yyyy-mm-dd'});
 		$('#fechareserva').datepicker({'format':'yyyy-mm-dd'});
+		$('#fechalimite').datepicker({
+			'format':'yyyy-mm-dd'
+		}).on(
+		'show', function() {			
+			// Obtener valores actuales z-index de cada elemento
+			var zIndexModal = $('#modalCuotas').css('z-index');
+			var zIndexFecha = $('.datepicker').css('z-index');
+		
+			$('.datepicker').css('z-index',zIndexModal+1);
+		});
 
 		$("#fecnacimiento").bootstrapBirthday({
 			dateFormat: "bigEndian",
@@ -664,6 +820,16 @@
 			onChange: function(){ 
 				calcularEdad($("#fecnacimiento").val()); 
 			} 
+		});
+
+		$('#tipocalculo').on('change',function(){
+			if($('#tipocalculo').prop('checked') == true) {
+				$('#tipocalculo').val("1");
+			}
+			else {
+				$('#tipocalculo').val("0");
+			}
+			
 		});
 	</script>
 

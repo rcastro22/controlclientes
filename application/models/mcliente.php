@@ -57,7 +57,8 @@ class mcliente extends CI_Model {
 							a.ingresos,
 							a.puesto,
 							a.otrosingresos,
-							a.concepto");
+							a.concepto,
+							a.depdirres");
 		$this->db->from("cliente a");
 		$this->db->where('a.idcliente',$idcliente);
 		$this->db->order_by("a.nombre,a.apellido","asc,asc"); 
@@ -76,7 +77,8 @@ class mcliente extends CI_Model {
 	public function getClienteTemporal($idnegociacion)
 	{		
 
-		$this->db->select("a.nombre,
+		$this->db->select("a.idclientetemp,
+							a.nombre,
 							a.apellido,
 							a.idtipoidentificacion,
 							a.dpi,
@@ -96,6 +98,7 @@ class mcliente extends CI_Model {
 							a.puesto,
 							a.otrosingresos,
 							a.concepto,
+							a.depdirres,
 							a.orden");
 		$this->db->from("clientetemporal a");
 		$this->db->where('a.idnegociacion',$idnegociacion);
@@ -156,6 +159,22 @@ class mcliente extends CI_Model {
 		{
 			return false;
 		}	
+	}
+
+	public function modificartemp($idclientetemp,$data,&$err)
+	{
+		$this->db->where('idclientetemp', $idclientetemp);
+		$this->db->update("clientetemporal",$data);
+		$data['error'] = $this->db->_error_message();
+		$err=$data['error'];
+		if ($err=="")
+		{
+			return true;
+		} 
+		else
+		{
+			return false;
+		}
 	}
 
 	public function borrar($data,&$err)

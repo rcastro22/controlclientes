@@ -105,7 +105,11 @@ class negociacion extends MY_Controller
 				$datosnegociacion->tablai=str_replace(array("\""), "'", $this->input->post('tablainmuebles'));
 				$datosnegociacion->tablaotros=str_replace(array("\""), "'", $this->input->post('tablaotros'));
 				$datosnegociacion->total_tablai=$this->input->post('txtTotalDecimal');
+				$datosnegociacion->tablacuotas=str_replace(array("\""), "'", $this->input->post('tablacuotas'));
 
+				$datosnegociacion->observaciones=$this->input->post('observaciones');
+
+				$datosnegociacion->tipocalculo=$this->input->post('tipocalculo');
 
 				$datosnegociacion->otrosclientes=$this->input->post('otrosclientes');
 				$this->load->view('movimientos/negociaciones/nuevo',$this->view_data);	
@@ -115,8 +119,10 @@ class negociacion extends MY_Controller
 				//exit();
 				// falta validaciones para combos
 				$this->form_validation->set_rules('proyectos','Proyectos');
+				$this->form_validation->set_rules('cliente','cliente');
+				$this->form_validation->set_rules('hcliente','hcliente');
 
-				if($this->input->post('cliente') == '0') {
+				if($this->input->post('hcliente') == '0' || $this->input->post('hcliente') == '') {
 					$this->form_validation->set_rules('nombre','Nombres','required');
 					$this->form_validation->set_rules('apellido','Apellidos','required');
 					$this->form_validation->set_rules('nit','Nit','required');
@@ -161,6 +167,14 @@ class negociacion extends MY_Controller
 				//Falta validacion para asesor
 				$this->form_validation->set_rules('comision','Comision','required|numeric');
 				$this->form_validation->set_rules('banco','Banco');
+
+				$this->form_validation->set_rules('formapago','formapago');
+				$this->form_validation->set_rules('plazocredito','plazocredito');
+				$this->form_validation->set_rules('tipofinanciamiento','tipofinanciamiento');
+				$this->form_validation->set_rules('entidadautorizada','entidadautorizada');
+				$this->form_validation->set_rules('tasainteres','tasainteres');
+
+				$this->form_validation->set_rules('observaciones','observaciones');
 				
 				if($this->form_validation->run()==FALSE)
 				{
@@ -184,7 +198,8 @@ class negociacion extends MY_Controller
 					$datosnegociacion->otrosingresos=$this->input->post('otrosingresos');
 
 					$datosnegociacion->idproyecto=$this->input->post('proyectos');
-					$datosnegociacion->idcliente=$this->input->post('cliente');
+					$datosnegociacion->idcliente=$this->input->post('hcliente');
+					$idcliente=$this->input->post('hcliente');
 
 					$datosnegociacion->clientejuridico=$this->input->post('clientejuridico');
 					$datosnegociacion->especifiquejuridico=$this->input->post('especifiquejuridico');
@@ -224,14 +239,19 @@ class negociacion extends MY_Controller
                     $datosnegociacion->montodescuento=$this->input->post('montodescuento');
                     $datosnegociacion->descripciondescuento=$this->input->post('descripciondescuento');
 
+					$datosnegociacion->observaciones=$this->input->post('observaciones');
 										
 					$datosnegociacion->tablai=str_replace(array("\""), "'", $this->input->post('tablainmuebles'));
 					$datosnegociacion->tablaotros=str_replace(array("\""), "'", $this->input->post('tablaotros'));
 					$datosnegociacion->total_tablai=$this->input->post('txtTotalDecimal');
+					$datosnegociacion->tablacuotas=str_replace(array("\""), "'", $this->input->post('tablacuotas'));
+
+					$datosnegociacion->tipocalculo=$this->input->post('tipocalculo');
 
 					$datosnegociacion->otrosclientes=$this->input->post('otrosclientes');
 
-					$this->view_data['datosnegociacion']=$datosnegociacion;					
+					$this->view_data['datosnegociacion']=$datosnegociacion;			
+					$this->view_data['idcliente']=$idcliente;		
 					$this->load->view('movimientos/negociaciones/nuevo',$this->view_data);
 				}
 				else 	// SI la validacion fue correcta
@@ -294,10 +314,14 @@ class negociacion extends MY_Controller
                     $datosnegociacion->montodescuento=$this->input->post('montodescuento');
                     $datosnegociacion->descripciondescuento=$this->input->post('descripciondescuento');
 
+					$datosnegociacion->observaciones=$this->input->post('observaciones');
 
 					$datosnegociacion->tablai=str_replace(array("\""), "'", $this->input->post('tablainmuebles'));
 					$datosnegociacion->tablaotros=str_replace(array("\""), "'", $this->input->post('tablaotros'));
 					$datosnegociacion->total_tablai=$this->input->post('txtTotalDecimal');
+					$datosnegociacion->tablacuotas=str_replace(array("\""), "'", $this->input->post('tablacuotas'));
+
+					$datosnegociacion->tipocalculo=$this->input->post('tipocalculo');
 
 					$datosnegociacion->otrosclientes=$this->input->post('otrosclientes');
 
@@ -363,7 +387,9 @@ class negociacion extends MY_Controller
                                'entidadautorizada'=>$this->input->post('entidadautorizada'),
                                'tasainteres'=>$this->input->post('tasainteres'),
                                'montodescuento'=>$this->input->post('montodescuento'),
-                               'descripciondescuento'=>$this->input->post('descripciondescuento'),
+							   'descripciondescuento'=>$this->input->post('descripciondescuento'),
+							   'observaciones'=>$this->input->post('observaciones'),
+							   'tipocalculo'=>$this->input->post('tipocalculo'),
 							   //Auditoria
 							   'CreadoPor'=>$this->session->userdata('user_id'),
 							   'FechaCreado'=>date("Y-m-d H:i:s"),
@@ -377,7 +403,8 @@ class negociacion extends MY_Controller
 							$datosnegociacionMax = $this->mnegociacion->getMaxNegociacion();
 							$fecha = strtotime($this->input->post('fechaprimerpago'));
 							//Inserta detalle de pago
-							for($x=1;$x<=$this->input->post('nocuotas');$x++)
+							// se comento porque se reemplaza por el nuevo proceso de cutoas
+							/*for($x=1;$x<=$this->input->post('nocuotas');$x++)
 							{
 								$this->load->model('mdetallepago');
 								$inserto2=$this->mdetallepago->grabar(array(
@@ -396,7 +423,12 @@ class negociacion extends MY_Controller
 									   ),$err);
 
 								$fecha = strtotime('+1 month',$fecha);
-							}
+							}*/
+
+							// Inserta las cuotas a travez del nuevo proceso
+							$arregloCuotas = json_decode($this->input->post('tablacuotas'));
+							$this->load->model('mdetallepago');
+							$inserto=$this->mdetallepago->grabar2($arregloCuotas,$datosnegociacionMax->maximo,$err);
 
 							// Inserta cliente temporal
 							if($this->input->post('cliente') == '0') {
@@ -423,6 +455,7 @@ class negociacion extends MY_Controller
 										'ingresos'=>$this->input->post('ingresos'),
 										'puesto'=>$this->input->post('puesto'),
 										'otrosingresos'=>$this->input->post('otrosingresos'),
+										'depdirres'=>$this->input->post('depdirres'),
 										'orden'=>1,
 										//'concepto'=>$this->input->post('concepto'),
 										//Auditoria
@@ -504,7 +537,8 @@ class negociacion extends MY_Controller
     			$datosnegociacion->dirtrabajo = $datoscliente->dirtrabajo;
     			$datosnegociacion->puesto = $datoscliente->puesto;
     			$datosnegociacion->ingresos = $datoscliente->ingresos;
-    			$datosnegociacion->otrosingresos = $datoscliente->otrosingresos;
+				$datosnegociacion->otrosingresos = $datoscliente->otrosingresos;
+				$datosnegociacion->depdirres = $datoscliente->depdirres;
 
         		$this->view_data['datosnegociacion']=$datosnegociacion; 	
         		if($msgError != "") {
@@ -538,6 +572,7 @@ class negociacion extends MY_Controller
 				//Falta validacion para asesor
 				$this->form_validation->set_rules('comision','Comision','required|numeric');
 				$this->form_validation->set_rules('banco','Banco');
+				$this->form_validation->set_rules('observaciones','observaciones');
 				if($this->form_validation->run()==FALSE)
 				{
 					$datosnegociacion = new stdClass();					
@@ -572,8 +607,18 @@ class negociacion extends MY_Controller
 					$datosnegociacion->monedacontrato=$this->input->post('monedacontrato');
 					$datosnegociacion->tipocambioneg=$this->input->post('tipocambioneg');
 
+					$datosnegociacion->formapago=$this->input->post('formapago');
+                    $datosnegociacion->plazocredito=$this->input->post('plazocredito');
+                    $datosnegociacion->tipofinanciamiento=$this->input->post('tipofinanciamiento');
+                    $datosnegociacion->entidadautorizada=$this->input->post('entidadautorizada');
+                    $datosnegociacion->tasainteres=$this->input->post('tasainteres');
+
 					$datosnegociacion->montodescuento=$this->input->post('montodescuento');
 					$datosnegociacion->descripciondescuento=$this->input->post('descripciondescuento');
+
+					$datosnegociacion->observaciones=$this->input->post('observaciones');
+
+					$datosnegociacion->tipocalculo=$this->input->post('tipocalculo');
 
 					$datosnegociacion->status=$this->input->post('status');
 
@@ -619,8 +664,18 @@ class negociacion extends MY_Controller
 					$datosnegociacion->monedacontrato=$this->input->post('monedacontrato');
 					$datosnegociacion->tipocambioneg=$this->input->post('tipocambioneg');
 
+					$datosnegociacion->formapago=$this->input->post('formapago');
+                    $datosnegociacion->plazocredito=$this->input->post('plazocredito');
+                    $datosnegociacion->tipofinanciamiento=$this->input->post('tipofinanciamiento');
+                    $datosnegociacion->entidadautorizada=$this->input->post('entidadautorizada');
+                    $datosnegociacion->tasainteres=$this->input->post('tasainteres');
+
 					$datosnegociacion->montodescuento=$this->input->post('montodescuento');
 					$datosnegociacion->descripciondescuento=$this->input->post('descripciondescuento');
+
+					$datosnegociacion->observaciones=$this->input->post('observaciones');
+
+					$datosnegociacion->tipocalculo=$this->input->post('tipocalculo');
 
 					$datosnegociacion->status=$this->input->post('status');
 
@@ -675,8 +730,15 @@ class negociacion extends MY_Controller
 								   'facturabanco'=>$this->input->post('banco'),
 								   'monedacontrato'=>$this->input->post('monedacontrato'),
 								   'tipocambioneg'=>$this->input->post('tipocambioneg'),
+								   'formapago'=>$this->input->post('formapago'),
+	                               'plazocredito'=>$this->input->post('plazocredito'),
+	                               'tipofinanciamiento'=>$this->input->post('tipofinanciamiento'),
+	                               'entidadautorizada'=>$this->input->post('entidadautorizada'),
+	                               'tasainteres'=>$this->input->post('tasainteres'),
 								   'montodescuento'=>$this->input->post('montodescuento'),
 								   'descripciondescuento'=>$this->input->post('descripciondescuento'),
+								   'observaciones'=>$this->input->post('observaciones'),
+								   'tipocalculo'=>$this->input->post('tipocalculo'),
 								   // Auditoria
 								   'ModificadoPor'=>$this->session->userdata('user_id'),
 								   'FechaModificado'=>date("Y-m-d H:i:s")
@@ -694,7 +756,70 @@ class negociacion extends MY_Controller
 								$inserto=$this->mdetallenegociacion->grabar($arreglo,$this->input->post('idnegociacion'),$err);
 
 							// 09-03-2015, Actualiza los datos del cliente
-	                    	
+	                    	if($this->input->post('cliente') == '0') {
+								$this->load->model('mcliente');
+								$datoscliente2 = $this->mcliente->getClienteTemporal($this->input->post('idnegociacion'));
+								$inserto2=$this->mcliente->modificartemp($datoscliente2->idclientetemp,
+										array(
+										'nombre'=>$this->input->post('nombre'),
+										'apellido'=>$this->input->post('apellido'),
+										//'idtipoidentificacion'=>$this->input->post('tipoidentificaciones'),
+										'dpi'=>$this->input->post('dpi'),
+										'fecnacimiento'=>date('Y-m-d',strtotime($this->input->post('fecnacimiento'))),
+										'profesion'=>$this->input->post('profesion'),
+										//'nacionalidad'=>$this->input->post('nacionalidad'),
+										'estadocivil'=>$this->input->post('estadocivil'),
+										'dirresidencia'=>$this->input->post('direccion'),
+										'telefono'=>$this->input->post('telefono'),
+										'celular'=>$this->input->post('celular'),
+										'nit'=>$this->input->post('nit'),
+										'email'=>$this->input->post('correo'),
+										'lugartrabajo'=>$this->input->post('empresa'),
+										'dirtrabajo'=>$this->input->post('dirtrabajo'),
+										'tiempolabor'=>$this->input->post('tiempolabor'),
+										'ingresos'=>$this->input->post('ingresos'),
+										'puesto'=>$this->input->post('puesto'),
+										'otrosingresos'=>$this->input->post('otrosingresos'),
+										'depdirres'=>$this->input->post('depdirres'),
+										//'concepto'=>$this->input->post('concepto'),
+										//Auditoria
+										'ModificadoPor'=>$this->session->userdata('user_id'),
+										'FechaModificado'=>date("Y-m-d H:i:s")
+								),$err);
+							}
+							else
+							{
+								$this->load->model('mcliente');
+								$inserto2=$this->mcliente->modificar($this->input->post('cliente'),
+										array(
+										'nombre'=>$this->input->post('nombre'),
+										'apellido'=>$this->input->post('apellido'),
+										//'idtipoidentificacion'=>$this->input->post('tipoidentificaciones'),
+										'dpi'=>$this->input->post('dpi'),
+										'fecnacimiento'=>date('Y-m-d',strtotime($this->input->post('fecnacimiento'))),
+										'profesion'=>$this->input->post('profesion'),
+										//'nacionalidad'=>$this->input->post('nacionalidad'),
+										'estadocivil'=>$this->input->post('estadocivil'),
+										'dirresidencia'=>$this->input->post('direccion'),
+										'telefono'=>$this->input->post('telefono'),
+										'celular'=>$this->input->post('celular'),
+										'nit'=>$this->input->post('nit'),
+										'email'=>$this->input->post('correo'),
+										'lugartrabajo'=>$this->input->post('empresa'),
+										'dirtrabajo'=>$this->input->post('dirtrabajo'),
+										'tiempolabor'=>$this->input->post('tiempolabor'),
+										'ingresos'=>$this->input->post('ingresos'),
+										'puesto'=>$this->input->post('puesto'),
+										'otrosingresos'=>$this->input->post('otrosingresos'),
+										'depdirres'=>$this->input->post('depdirres'),
+										//'concepto'=>$this->input->post('concepto'),
+										//Auditoria
+										'CreadoPor'=>$this->session->userdata('user_id'),
+										'FechaCreado'=>date("Y-m-d H:i:s"),
+										'ModificadoPor'=>$this->session->userdata('user_id'),
+										'FechaModificado'=>date("Y-m-d H:i:s")
+								),$err);
+							}
 
 	                    	// Envia email
 							$this->enviarMailCambios($this->input->post('idnegociacion'),"Modificado");
@@ -1179,13 +1304,15 @@ class negociacion extends MY_Controller
 	   	$hayDatos = false;
 	   	$proyecto = 0;
 	   	$nombreProyecto = "";
-	   	$msj = "";
+		$msj = "";
+		$textocorreo = "";  
 
 	   	foreach ($datosmail as $datos) {
 	   		$hayDatos = true;
 	   		$email = $datos->email;
 	   		$proyecto = $datos->idproyecto;
 	   		$nombreProyecto = $datos->nombre;
+			$textocorreo = $datos->textocorreo;
 
 	   		switch ($proyecto) {
 		   		case 1:
@@ -1250,20 +1377,8 @@ class negociacion extends MY_Controller
 	</table>
 	<hr size=1 />
 	<p>
-		Estimado cliente, el presente se le envía con el fin de recordarle el pago de su cuota correspondiente al enganche del proyecto ".$nombreProyecto.".
-		<br/><br/>
-		Le rogamos realizar el pago antes del 5 de cada mes.
-		<br/><br/>
-		Si usted ya hizo su pago, favor hacer caso omiso a este correo.
-		<br/><br/>
-		Nuestra satisfacción es nuestro compromiso.  Muchas gracias por la atención al mismo.
-		<br/><br/>
-		Banco Industrial
-		<br/>
-		Cuenta ".$cuentaDeposito."
+		".$textocorreo."
 	</p>
-	<hr size=1 />
-
 </body>
 </html>
 ";
@@ -1398,6 +1513,7 @@ class negociacion extends MY_Controller
 						   'puesto'=>$datoscliente->puesto,
 						   'otrosingresos'=>$datoscliente->otrosingresos,
 						   'concepto'=>$datoscliente->concepto,
+						   'depdirres'=>$datoscliente->depdirres,
 						   //Auditoria
 						   'CreadoPor'=>$this->session->userdata('user_id'),
 						   'FechaCreado'=>date("Y-m-d H:i:s"),

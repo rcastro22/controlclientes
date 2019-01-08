@@ -12,6 +12,7 @@ class mnegociacion extends CI_Model {
 								else  b.nombre || ' ' || b.apellido
 							end cliente,
 							a.idproyecto,
+							p.nombre proyecto,
 							a.clientejuridico,
 							a.especifiquejuridico,
 							a.nombramientojuridico,
@@ -32,6 +33,7 @@ class mnegociacion extends CI_Model {
 							a.monedacontrato,
 							a.tipocambioneg,
 							a.status,
+							a.observaciones,
 							a.CreadoPor,
 							a.FechaCreado
 							from negociacion a
@@ -39,6 +41,8 @@ class mnegociacion extends CI_Model {
              				on a.idcliente = b.idcliente
 							left outer join clientetemporal c
 							on c.idnegociacion = a.idnegociacion and c.orden = 1
+							join proyecto p
+							on p.idproyecto = a.idproyecto
 							where a.status in ($status)
 							and ($idcliente == -1 or a.idcliente = $idcliente)");
 		return $query->result();
@@ -71,6 +75,7 @@ class mnegociacion extends CI_Model {
 							a.monedacontrato,
 							a.tipocambioneg,
 							a.status,
+							a.observaciones,
 							a.CreadoPor,
 							a.FechaCreado
 							from negociacion a
@@ -118,9 +123,11 @@ class mnegociacion extends CI_Model {
 				            a.entidadautorizada,
 				            a.tasainteres,
 				            a.montodescuento,
-				            a.descripciondescuento,
+							a.descripciondescuento,
+							a.observaciones,
 				            a.CreadoPor,
-							a.FechaCreado
+							a.FechaCreado,
+							a.tipocalculo
 							from negociacion a
 							where a.idnegociacion = $idnegociacion");
 		return $query->row();
@@ -233,6 +240,7 @@ class mnegociacion extends CI_Model {
 							a.monedacontrato,
 							a.tipocambioneg,
 							a.status,
+							a.observaciones,
 							a.CreadoPor,
 							a.FechaCreado
 							from negociacion a
@@ -305,7 +313,8 @@ class mnegociacion extends CI_Model {
 		$query = $this->db->query("select
 									      c.email
 									      ,n.idproyecto
-									      ,p.nombre
+										  ,p.nombre
+										  ,p.textocorreo
 									from
 									    negociacion n
 									    ,cliente c

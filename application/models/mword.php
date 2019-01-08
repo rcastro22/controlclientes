@@ -32,7 +32,8 @@ class mword extends CI_Model {
 									    ,c.[dirtrabajo]
 									    ,c.[puesto]
 									    ,c.[ingresos]
-									    ,c.[otrosingresos]
+										,c.[otrosingresos]
+										,c.[depdirres]
 									    ,n.[clientejuridico]                      
 					                    ,n.[especifiquejuridico]                      
 					                    ,n.[nombramientojuridico]
@@ -106,7 +107,8 @@ class mword extends CI_Model {
                       					,n.[financiamientobanco]
                       					,n.[nocuotas]
                       					,n.[idformapago]
-                      					,p.[nombre] proyecto
+										,p.[nombre] proyecto
+										,c.[depdirres]
 									from 
 									    clientetemporal c
 									    ,negociacion n
@@ -355,8 +357,8 @@ and n.[idnegociacion] = $idnegociacion");
 									from 
 									    detallepago a
 									where 
-									    a.[nopago] > 1
-									    and a.[idnegociacion] = $idnegociacion      
+									    --a.[nopago] > 1
+									    a.[idnegociacion] = $idnegociacion      
 									group by
 									    a.[pagocalculado]      
 									order by
@@ -398,6 +400,8 @@ where
 					            c.[nombre] tipo,
 					            d.[nombre] modelo,          
 								a.[valor],
+								a.[preciobase],
+								a.[gastoslegales],
 								b.[preciometro2],
 								b.[sotano],
 								b.[idtipoinmueble],
@@ -412,7 +416,7 @@ where
 								join negociacion e on a.[idnegociacion] = e.[idnegociacion]			
 							where b.[idproyecto] = e.[idproyecto] 
 								and a.idnegociacion = $idnegociacion
-							order by b.[idtipoinmueble]");
+								order by c.[Nombre] ");
 		return $query->result();
 	}
 
